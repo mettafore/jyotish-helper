@@ -28,7 +28,6 @@ __pycache__/
 *.py[cod]
 .venv/
 venv/
-.python-version
 *.egg-info/
 
 # Swiss Ephemeris raw data files (NOT committed — Moshier mode needs none;

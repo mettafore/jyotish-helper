@@ -1,0 +1,48 @@
+/* Jyotish Helper — Saffron Gold design tokens (canonical: designs/design-04)
+   Import or copy into web/ global styles. Reference these vars; do not hardcode. */
+:root{
+  /* surfaces */
+  --bg1:#fbf4e6;            /* page gradient start (warm ivory) */
+  --bg2:#fffdf8;            /* page gradient end */
+  --glass:rgba(255,251,242,.6);     /* frosted panel fill */
+  --glass-brd:rgba(212,175,110,.45);/* panel border */
+
+  /* text */
+  --ink:#3a2e1c;           /* primary */
+  --ink-soft:#8a7558;      /* secondary / labels */
+  --faint:#bca889;         /* hints / sign numbers */
+
+  /* accents */
+  --gold:#b8902f;          /* hairlines, primary accent */
+  --gold-soft:#f0e2c0;     /* active chip / rail fill */
+  --saffron:#e08a2b;       /* "Now" marker, hot accent */
+
+  /* structure */
+  --line:rgba(184,144,47,.28);
+  --shadow:0 16px 46px -16px rgba(150,110,40,.3);
+
+  /* radii */
+  --r-card:30px;
+  --r-control:14px;
+  --r-pill:22px;
+
+  /* glass */
+  --blur:blur(26px) saturate(140%);
+
+  /* fonts */
+  --font-ui:'Inter',system-ui,sans-serif;
+  --font-display:'Cormorant Garamond',serif;   /* headings / values */
+  --font-graha:'Sora',sans-serif;              /* graha glyphs — vibrant geometric */
+  --font-deva:'Noto Sans Devanagari',sans-serif;
+
+  /* per-graha colors — theme-coherent (earth + a few jewel accents) */
+  --gr-su:#d97a1f;   /* Sun     — saffron */
+  --gr-mo:#7a8a8f;   /* Moon    — moonstone slate-silver */
+  --gr-ma:#b83f2e;   /* Mars    — rust red */
+  --gr-me:#2f7d5e;   /* Mercury — emerald green */
+  --gr-ju:#b8902f;   /* Jupiter — gold */
+  --gr-ve:#a06aa8;   /* Venus   — orchid */
+  --gr-sa:#3f5f86;   /* Saturn  — deep indigo-blue */
+  --gr-ra:#6a5a3f;   /* Rahu    — umber */
+  --gr-ke:#8a6a4a;   /* Ketu    — tan */
+}
