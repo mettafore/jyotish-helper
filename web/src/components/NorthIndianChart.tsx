@@ -4,6 +4,12 @@ const ABBR: Record<string, string> = {
   sun: "Su", moon: "Mo", mars: "Ma", mercury: "Me", jupiter: "Ju",
   venus: "Ve", saturn: "Sa", rahu: "Ra", ketu: "Ke",
 };
+const ABBR_DEVA: Record<string, string> = {
+  sun: "सू", moon: "चं", mars: "मं", mercury: "बु", jupiter: "गु",
+  venus: "शु", saturn: "श", rahu: "रा", ketu: "के",
+};
+const DEVA_NUM = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
+const toDeva = (n: number) => String(n).split("").map((d) => DEVA_NUM[+d]).join("");
 const COLOR: Record<string, string> = {
   sun: "var(--gr-su)", moon: "var(--gr-mo)", mars: "var(--gr-ma)", mercury: "var(--gr-me)",
   jupiter: "var(--gr-ju)", venus: "var(--gr-ve)", saturn: "var(--gr-sa)",
@@ -21,8 +27,11 @@ const SNUM: Record<number, [number, number]> = {
 };
 
 export function NorthIndianChart(
-  { positions, house1Sign }: { positions: Record<string, number>; house1Sign: number },
+  { positions, house1Sign, script = "western" }:
+  { positions: Record<string, number>; house1Sign: number; script?: "western" | "devanagari" },
 ) {
+  const abbr = script === "devanagari" ? ABBR_DEVA : ABBR;
+  const num = (n: number) => (script === "devanagari" ? toDeva(n) : String(n));
   // Group grahas by house so multiple in one cell stack horizontally.
   const byHouse: Record<number, string[]> = {};
   for (const [planet, sign] of Object.entries(positions)) {
@@ -46,7 +55,7 @@ export function NorthIndianChart(
           <text key={`s${h}`} x={sx} y={sy} textAnchor="middle"
                 fill="var(--faint)" fontSize={9} fontWeight={600}
                 fontFamily="Inter, sans-serif">
-            {signInHouse(h)}
+            {num(signInHouse(h))}
           </text>
         );
       })}
@@ -56,7 +65,7 @@ export function NorthIndianChart(
           <text key={h} x={cx} y={cy} textAnchor="middle"
                 fontFamily="Sora, sans-serif" fontWeight={600} fontSize={15}>
             {planets.map((p, i) => (
-              <tspan key={p} fill={COLOR[p]} dx={i ? 6 : 0}>{ABBR[p]}</tspan>
+              <tspan key={p} fill={COLOR[p]} dx={i ? 6 : 0}>{abbr[p]}</tspan>
             ))}
           </text>
         );

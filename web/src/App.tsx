@@ -73,7 +73,7 @@ export default function App() {
 
         <div className="grid2">
           <div className="chartwrap">
-            <NorthIndianChart positions={positions} house1Sign={house1Sign} />
+            <NorthIndianChart positions={positions} house1Sign={house1Sign} script={script} />
           </div>
           <div className="panel">
             <div className="field">
