@@ -121,4 +121,3 @@ distributed app. Keep the generator isolated.
 ## Follow-ups (not v1 implementation)
 
 - **Auto-commit:** documented in AGENTS.md; optionally enforce via a Stop hook.
-- Later: birth charts, live Lagna (needs location), exact degrees, aspects.
