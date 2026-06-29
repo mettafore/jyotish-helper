@@ -82,6 +82,21 @@ charts, houses requiring location. Defer all.
 - Generator: Python 3, `pyswisseph`. Deps managed with **uv** in
   `generator/pyproject.toml` + `uv.lock`; run via `uv run`. No pip/requirements.txt.
 
+## Deployment
+
+Hosted on **Vercel** (project `web`, root dir `web/`). Live:
+https://web-pi-kohl-36.vercel.app
+
+Deploy production from the linked `web/` dir:
+
+```sh
+cd web && vercel --prod --yes
+```
+
+`web/.vercel/` (the local project link) is gitignored — on a fresh clone run
+`vercel link` once before deploying. Push to `main` first so the deploy
+matches the repo.
+
 ## Test-driven development
 
 **Write tests first.** For every feature/bugfix, follow red→green→refactor:
