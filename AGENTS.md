@@ -112,12 +112,16 @@ yielding. Keep commits small and reversible; never push unless asked.
 
 ## Skills to use
 
+- **`jyotish-design-standards`** (project skill, `.agents/skills/`) — **use
+  whenever you build, style, or review any UI**: picking a color/font/radius/
+  shadow/blur, building a component or screen, or styling the North Indian chart
+  or time slider. It is the source of truth for the approved "Saffron Gold" look
+  (tokens in `.agents/skills/jyotish-design-standards/tokens.css`). Do NOT invent
+  ad-hoc colors/fonts — reference the tokens. Skip only for backend/generator code.
 - **`vercel-react-best-practices`** (external) — apply when writing/refactoring
   React. Install: `npx skills add https://github.com/vercel-labs/agent-skills --skill vercel-react-best-practices`
 - **`/code-review`** on diffs before commit; **`/security-review`** before any
   deploy. (Both ship with the harness — trusted, no external supply chain.)
-- A project **design-standards** skill (palette, typography, chart aesthetics)
-  is planned — see follow-up in the spec.
 
 ## Licensing note
 
