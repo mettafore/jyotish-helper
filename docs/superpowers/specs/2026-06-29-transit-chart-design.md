@@ -120,8 +120,5 @@ distributed app. Keep the generator isolated.
 
 ## Follow-ups (not v1 implementation)
 
-- **Design-standards skill:** a project skill in `.agents/skills/` pinning visual
-  standards (palette, typography, North Indian chart aesthetics, shadcn component
-  conventions). To be authored via the `writing-skills` skill before UI build.
 - **Auto-commit:** documented in AGENTS.md; optionally enforce via a Stop hook.
 - Later: birth charts, live Lagna (needs location), exact degrees, aspects.
