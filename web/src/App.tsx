@@ -6,14 +6,21 @@ import { TimeSlider } from "./components/TimeSlider";
 import { signAt, transitionsInRange, type TransitData } from "./lib/transits";
 
 const GRAHAS = ["sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn", "rahu", "ketu"];
-const YEAR_MS = 365 * 864e5;
+const MONTH_MS = 2629800000; // ~30.44 days
+const RANGES: { months: number; label: string }[] = [
+  { months: 3, label: "3M" },
+  { months: 6, label: "6M" },
+  { months: 12, label: "1Y" },
+  { months: 60, label: "5Y" },
+  { months: 120, label: "10Y" },
+];
 
 export default function App() {
   const [data, setData] = useState<TransitData | null>(null);
   const [value, setValue] = useState<Date>(new Date());
   const [house1Sign, setHouse1Sign] = useState(0);
   const [script, setScript] = useState<"western" | "devanagari">("western");
-  const [rangeYears, setRangeYears] = useState<1 | 5 | 10>(1);
+  const [rangeMonths, setRangeMonths] = useState(12);
   const [enabled, setEnabled] = useState<Record<string, boolean>>(
     Object.fromEntries(GRAHAS.map((g) => [g, g !== "moon"])), // Moon off by default
   );
@@ -31,11 +38,11 @@ export default function App() {
   }, [data, value]);
 
   const rangeStart = useMemo(
-    () => new Date(Math.max(value.getTime() - rangeYears * YEAR_MS, winStart.getTime())),
-    [value, rangeYears, winStart]);
+    () => new Date(Math.max(value.getTime() - rangeMonths * MONTH_MS, winStart.getTime())),
+    [value, rangeMonths, winStart]);
   const rangeEnd = useMemo(
-    () => new Date(Math.min(value.getTime() + rangeYears * YEAR_MS, winEnd.getTime())),
-    [value, rangeYears, winEnd]);
+    () => new Date(Math.min(value.getTime() + rangeMonths * MONTH_MS, winEnd.getTime())),
+    [value, rangeMonths, winEnd]);
 
   const events = useMemo(() => {
     if (!data) return [];
@@ -87,11 +94,13 @@ export default function App() {
 
         <div className="timebar">
           <div className="timehead">
-            <span className="ttl">Timeline</span>
+            <button type="button" className="today-btn"
+                    onClick={() => setValue(new Date())}>Today</button>
             <div className="range-seg">
-              {([1, 5, 10] as const).map((y) => (
-                <button key={y} type="button" className={rangeYears === y ? "on" : ""}
-                        onClick={() => setRangeYears(y)}>±{y}y</button>
+              {RANGES.map((r) => (
+                <button key={r.months} type="button"
+                        className={rangeMonths === r.months ? "on" : ""}
+                        onClick={() => setRangeMonths(r.months)}>±{r.label}</button>
               ))}
             </div>
           </div>

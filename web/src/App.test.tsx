@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import App from "./App";
 
 const fake = {
@@ -28,5 +28,26 @@ describe("App", () => {
     render(<App />);
     await waitFor(() => expect(screen.getByText("Ju")).toBeInTheDocument());
     expect(screen.getByText("Sa")).toBeInTheDocument();
+  });
+
+  it("offers 3M and 6M range presets (plus year presets)", async () => {
+    render(<App />);
+    await waitFor(() => expect(screen.getByText("Ju")).toBeInTheDocument());
+    expect(screen.getByText(/3M/)).toBeInTheDocument();
+    expect(screen.getByText(/6M/)).toBeInTheDocument();
+    expect(screen.getByText(/1Y/)).toBeInTheDocument();
+  });
+
+  it("Today button returns the viewed date to now after scrubbing away", async () => {
+    render(<App />);
+    await waitFor(() => expect(screen.getByText("Ju")).toBeInTheDocument());
+    // Scrub to the far past edge of the range.
+    fireEvent.change(screen.getByLabelText("scrub time"), { target: { value: "0" } });
+    const todayStr = new Date().toLocaleDateString();
+    // After scrubbing, the viewed date should no longer be today.
+    expect(screen.queryByText((t) => t.includes(todayStr))).toBeNull();
+    // Click Today -> back to now.
+    fireEvent.click(screen.getByText("Today"));
+    expect(screen.getByText((t) => t.includes(todayStr))).toBeInTheDocument();
   });
 });

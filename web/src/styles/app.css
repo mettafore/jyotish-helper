@@ -54,6 +54,11 @@ select{width:100%;appearance:none;padding:11px 14px;border-radius:var(--r-contro
 .timebar{margin-top:24px;}
 .timehead{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
 .timehead .ttl{font-size:13px;font-weight:600;color:var(--ink-soft);}
+.today-btn{border:1px solid var(--line);background:rgba(255,255,255,.6);
+  color:var(--gold);font-weight:600;font-size:12px;padding:6px 14px;
+  border-radius:var(--r-pill);cursor:pointer;
+  box-shadow:0 2px 8px -4px rgba(150,110,40,.3);}
+.today-btn:hover{background:#fff;}
 .range-seg{display:flex;gap:2px;padding:3px;background:rgba(255,255,255,.5);
   border:1px solid var(--line);border-radius:11px;font-size:11px;}
 .range-seg button{border:0;background:transparent;padding:5px 10px;border-radius:8px;
