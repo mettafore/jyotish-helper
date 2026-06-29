@@ -1125,7 +1125,7 @@ Run: `npm run test -- App` → PASS. Then full suite: `npm run test` → all pas
 
 - [ ] **Step 5: Manual verification**
 
-Run: `npm run dev`, open the app. Confirm: chart shows all 9 grahas in correct signs for "now"; changing the Lagna dropdown rotates the houses; toggling Moon adds/removes its dots; dragging the slider updates the chart; clicking a dot jumps to that transition; the ±1y/±5y/±10y buttons widen the band (more dots appear); Western/Devanagari toggle switches sign names. Then `npm run build` succeeds.
+Run: `npm run dev`, open the app. Confirm: chart shows all 9 grahas in correct signs for "now"; changing the Lagna dropdown rotates the houses; toggling Moon adds/removes its dots; dragging the slider updates the chart; clicking a dot jumps to that transition; the range presets widen the band (more dots appear); Western/Devanagari toggle switches the chart's script. Then `npm run build` succeeds. (See "Post-v1 additions" below for presets/Today/Now/Devanagari, which extend this baseline.)
 
 - [ ] **Step 6: Commit**
 
@@ -1142,3 +1142,31 @@ git add web/ && git commit -m "feat(web): wire transit chart app end-to-end"
 - Apply the **`jyotish-design-standards`** skill for any styling decision.
 - The Phase A checkpoint exists so the user can sanity-check the generated data before any UI is built.
 - Out of scope (do NOT add): degrees, aspects, dashas, nakshatras, birth charts, live Lagna, backend.
+
+---
+
+## Post-v1 additions (shipped, TDD'd)
+
+These were added by user request after Task 11 and after the first deploy. Each
+followed red→green TDD with the test noted; all are live. Recorded here so the plan
+matches the deployed app.
+
+- **Range presets** — replaced ±1y/±5y/±10y with month-based **±3M/±6M/±1Y/±5Y/±10Y**
+  (default ±1Y). `App.tsx` `rangeMonths` state. Test: App renders 3M/6M/1Y presets.
+- **Today button** — beside the presets; resets the viewed date to `new Date()`.
+  Test: scrub away, click Today, viewed date is today again.
+- **Transition dots = clickable buttons** — pop on hover/focus (CSS scale), tooltip
+  shows **planet + exact date**, click jumps to the transition. Test: dot `title`
+  contains the transition date.
+- **Clickable "Now" marker** — the Now marker is a button that jumps to the present.
+  Test: clicking it calls `onChange` with a Date within 5s of now.
+- **Full-chart Devanagari** — `NorthIndianChart` takes a `script` prop; in Devanagari
+  mode graha glyphs use Devanagari abbreviations (सू चं मं बु गु शु श रा के) and house
+  sign numbers use Devanagari numerals. Test: chart renders सू / श, not Su, when
+  `script="devanagari"`.
+
+## Deployment
+
+Static frontend on **Vercel** — `npx vercel --prod --yes` from `web/` (scope
+`mettafore`). Live: https://web-pi-kohl-36.vercel.app. `transitions.json` ships in
+`web/public/data/` as a static asset.

@@ -1,7 +1,9 @@
 # Jyotish Helper v1 — Transit Chart Design
 
 **Date:** 2026-06-29
-**Status:** Approved (brainstorming)
+**Status:** Implemented & deployed (v1 live on Vercel). This spec reflects the
+shipped app, including post-plan UI additions (range presets, Today + clickable
+Now, hover/dated transition dots, full-chart Devanagari).
 
 ## Goal
 
@@ -76,19 +78,24 @@ Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn, Rahu, Ketu. Moon is fast
   ascendant computation**.
 - Each graha rendered into the house holding its current sign. Multiple grahas in
   one sign stack within the cell.
-- Sign labels: **Western default** (Aries…), toggle to **Devanagari** (मेष…).
+- Script toggle (**Western default** / **Devanagari**) switches the **whole chart**:
+  Lagna dropdown sign names (Aries… / मेष…), **graha glyphs** (Su… / सू चं मं बु गु
+  शु श रा के), and **house sign numbers** (1–12 / Devanagari numerals १–१२).
 
 ### Time slider (single control)
 
-- Range: default **±1 year**, expandable up to **±10 years**, panning within the
-  fixed 2015–2040 data window.
+- Range presets: **±3M / ±6M / ±1Y / ±5Y / ±10Y** (default **±1Y**), as a band
+  around the viewed date, clamped to the fixed 2015–2040 data window.
 - **Drag handle:** free scrub to any date; chart updates live (cheap lookup).
-- **Transition dots:** sign-change events render as dots on the track; clicking a
-  dot jumps to that exact transition. No arrow buttons.
+- **Transition dots:** sign-change events render as clickable dot buttons on the
+  track; each **pops on hover/focus** and its tooltip shows the **planet + exact
+  date**; clicking jumps to that exact transition. No arrow buttons.
 - **Planet filter:** user selects which planets' transitions appear as dots /
   drive snapping. Default = all **except Moon** (so slow, astrologically major
   events aren't buried); Moon toggleable on.
-- **"Now" marker** always present on the track.
+- **"Now" marker** always present on the track, and is itself a **clickable
+  button** that jumps the view back to the present (also a **Today** button
+  beside the range presets).
 
 ## Error / edge handling
 
@@ -111,6 +118,12 @@ Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn, Rahu, Ketu. Moon is fast
 - Generator: Python 3 + pyswisseph, deps managed with **uv** (`generator/pyproject.toml`
   + `uv.lock`; run via `uv run`). No pip/requirements.txt.
 - Apply the `vercel-react-best-practices` skill for React work.
+
+## Deployment
+
+Static frontend deployed on **Vercel** (`npx vercel --prod` from `web/`, scope
+`mettafore`). Live: https://web-pi-kohl-36.vercel.app. The `transitions.json` ships
+in `web/public/data/` and is served as a static asset; no server/runtime.
 
 ## Licensing
 
