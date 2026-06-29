@@ -108,7 +108,8 @@ Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn, Rahu, Ketu. Moon is fast
 ## Stack
 
 - Frontend: Vite + React + TypeScript + Tailwind + shadcn/ui.
-- Generator: Python 3 + pyswisseph (`generator/requirements.txt`).
+- Generator: Python 3 + pyswisseph, deps managed with **uv** (`generator/pyproject.toml`
+  + `uv.lock`; run via `uv run`). No pip/requirements.txt.
 - Apply the `vercel-react-best-practices` skill for React work.
 
 ## Licensing

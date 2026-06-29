@@ -79,7 +79,8 @@ charts, houses requiring location. Defer all.
 ## Stack & conventions
 
 - Frontend: Vite + React + TypeScript + Tailwind + **shadcn/ui**.
-- Generator: Python 3, `pyswisseph`. Keep deps in `generator/requirements.txt`.
+- Generator: Python 3, `pyswisseph`. Deps managed with **uv** in
+  `generator/pyproject.toml` + `uv.lock`; run via `uv run`. No pip/requirements.txt.
 
 ## Test-driven development
 
