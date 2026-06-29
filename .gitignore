@@ -36,6 +36,10 @@ venv/
 *.se1
 ephe/
 
+# Course guidelines (local reference only, not tracked — same as gdl-papers)
+course/
+course/*
+
 # Generated intermediate scratch (the FINAL transitions JSON IS committed —
 # see data/ in AGENTS.md). Only ignore scratch/temp outputs here:
 generator/scratch/
