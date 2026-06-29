@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jyotish Helper — Jewel Dark</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --glass:rgba(18,20,24,.6); --glass-brd:rgba(196,160,80,.28);
+  --ink:#f1ece0; --ink-soft:#a59c88; --faint:#6b6452;
+  --emerald:#2fae7e; --sapphire:#3f7fd6; --ruby:#d6485f; --gold:#cda953;
+  --shadow:0 24px 70px -22px rgba(0,0,0,.85);
+  --line:rgba(196,160,80,.16);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Inter',system-ui,sans-serif; color:var(--ink); min-height:100vh;
+  display:grid; place-items:center; padding:40px 20px;
+  background:
+    radial-gradient(900px 700px at 50% 40%, #1a1d22, #0a0b0d 75%),
+    #07080a;
+}
+.app{width:min(940px,100%);}
+.card{position:relative; border-radius:30px; padding:30px 34px 34px;
+  background:var(--glass); border:1px solid var(--glass-brd);
+  backdrop-filter:blur(28px) saturate(130%); -webkit-backdrop-filter:blur(28px) saturate(130%);
+  box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,.06);}
+.mandala{position:absolute;inset:0;pointer-events:none;display:grid;place-items:center;opacity:.1;overflow:hidden;}
+.mandala svg{width:560px;height:560px;color:var(--emerald);}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;position:relative;z-index:2;}
+.brand{display:flex;align-items:center;gap:13px;}
+.brand .om{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;
+  background:linear-gradient(135deg,#0f5a44,var(--emerald)); color:#fff; font-family:'Noto Sans Devanagari'; font-size:22px;
+  box-shadow:0 0 22px -4px var(--emerald), inset 0 1px 0 rgba(255,255,255,.25);}
+.brand h1{font-size:18px;font-weight:600;letter-spacing:-.02em;}
+.brand p{font-size:11.5px;color:var(--ink-soft);letter-spacing:.04em;}
+.seg{display:flex;padding:3px;gap:2px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;font-size:12px;}
+.seg button{border:0;background:transparent;padding:6px 12px;border-radius:9px;cursor:pointer;color:var(--ink-soft);font-weight:500;}
+.seg button.on{background:rgba(205,169,83,.18);color:var(--gold);box-shadow:inset 0 0 0 1px rgba(205,169,83,.4);}
+.rule{height:1px;margin:16px 0 2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.4;position:relative;z-index:2;}
+.grid2{display:grid;grid-template-columns:1.15fr .85fr;gap:26px;margin-top:16px;position:relative;z-index:2;}
+@media(max-width:760px){.grid2{grid-template-columns:1fr}}
+.chartwrap{position:relative;aspect-ratio:1;}
+svg.chart{width:100%;height:100%;display:block;}
+svg.chart .frame{fill:rgba(255,255,255,.015);stroke:rgba(205,169,83,.55);stroke-width:1.5;}
+svg.chart .grid{fill:none;stroke:rgba(205,169,83,.4);stroke-width:1.1;}
+svg.chart .snum{fill:var(--faint);font-size:9px;font-weight:600;}
+svg.chart .pl{fill:#ece6d8;font-size:13px;font-weight:600;}
+svg.chart .pl.em{fill:var(--emerald);filter:drop-shadow(0 0 5px rgba(47,174,126,.6));}
+svg.chart .pl.sa{fill:var(--sapphire);filter:drop-shadow(0 0 5px rgba(63,127,214,.6));}
+svg.chart .pl.ru{fill:var(--ruby);filter:drop-shadow(0 0 5px rgba(214,72,95,.6));}
+.panel{display:flex;flex-direction:column;gap:18px;}
+.field label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-soft);margin-bottom:7px;font-weight:600;}
+select{width:100%;appearance:none;padding:11px 14px;border-radius:13px;border:1px solid var(--line);
+  background:rgba(255,255,255,.03) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a59c88' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center;
+  font-family:inherit;font-size:14px;color:var(--ink);cursor:pointer;}
+select option{background:#14161a;}
+.chips{display:flex;flex-wrap:wrap;gap:7px;}
+.chip{font-size:12px;padding:6px 11px;border-radius:20px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--ink-soft);cursor:pointer;display:flex;align-items:center;gap:6px;font-weight:500;}
+.chip .dot{width:8px;height:8px;border-radius:50%;box-shadow:0 0 6px currentColor;}
+.chip.on{background:rgba(205,169,83,.12);border-color:rgba(205,169,83,.35);color:var(--gold);}
+.chip.off{opacity:.4;text-decoration:line-through;}
+.readout{padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid var(--line);}
+.readout .lbl{font-size:11px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.1em;}
+.readout .val{font-size:17px;font-weight:600;margin-top:3px;}
+.timebar{margin-top:24px;position:relative;z-index:2;}
+.timehead{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.timehead .ttl{font-size:13px;font-weight:600;color:var(--ink-soft);}
+.range-seg{display:flex;gap:2px;padding:3px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:11px;font-size:11px;}
+.range-seg button{border:0;background:transparent;padding:5px 10px;border-radius:8px;cursor:pointer;color:var(--ink-soft);font-weight:600;}
+.range-seg button.on{background:rgba(205,169,83,.2);color:var(--gold);}
+.track{position:relative;height:46px;}
+.rail{position:absolute;top:21px;left:0;right:0;height:4px;border-radius:4px;background:rgba(205,169,83,.14);}
+.fill{position:absolute;top:21px;left:0;width:52%;height:4px;border-radius:4px;background:linear-gradient(90deg,var(--emerald),var(--sapphire));box-shadow:0 0 12px rgba(47,174,126,.45);}
+.tdot{position:absolute;top:18px;width:11px;height:11px;border-radius:50%;transform:translateX(-50%);background:#0b0c0e;cursor:pointer;}
+.tdot.em{border:2px solid var(--emerald);box-shadow:0 0 8px var(--emerald);}
+.tdot.sa{border:2px solid var(--sapphire);box-shadow:0 0 8px var(--sapphire);}
+.tdot.ru{border:2px solid var(--ruby);box-shadow:0 0 8px var(--ruby);}
+.tdot.go{border:2px solid var(--gold);box-shadow:0 0 8px var(--gold);}
+.now{position:absolute;top:8px;height:30px;width:2px;transform:translateX(-50%);background:var(--gold);box-shadow:0 0 8px var(--gold);}
+.now::after{content:"Now";position:absolute;top:-17px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:700;color:var(--gold);}
+.handle{position:absolute;top:11px;left:52%;width:24px;height:24px;transform:translateX(-50%);border-radius:50%;background:#15171b;border:1px solid rgba(205,169,83,.5);box-shadow:0 0 16px rgba(205,169,83,.5);cursor:grab;z-index:3;}
+.handle::after{content:"";position:absolute;inset:6px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#8a6f2e);}
+.scale{display:flex;justify-content:space-between;font-size:10px;color:var(--faint);margin-top:4px;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="card">
+    <div class="mandala">
+      <svg viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width=".6">
+        <circle cx="100" cy="100" r="92"/><circle cx="100" cy="100" r="70"/><circle cx="100" cy="100" r="48"/><circle cx="100" cy="100" r="26"/>
+        <g id="p"><path d="M100 8 C120 40 120 60 100 92 C80 60 80 40 100 8Z"/></g>
+        <use href="#p" transform="rotate(30 100 100)"/><use href="#p" transform="rotate(60 100 100)"/><use href="#p" transform="rotate(90 100 100)"/>
+        <use href="#p" transform="rotate(120 100 100)"/><use href="#p" transform="rotate(150 100 100)"/><use href="#p" transform="rotate(180 100 100)"/>
+        <use href="#p" transform="rotate(210 100 100)"/><use href="#p" transform="rotate(240 100 100)"/><use href="#p" transform="rotate(270 100 100)"/>
+        <use href="#p" transform="rotate(300 100 100)"/><use href="#p" transform="rotate(330 100 100)"/>
+      </svg>
+    </div>
+    <header>
+      <div class="brand"><div class="om">ॐ</div><div><h1>Jyotish Helper</h1><p>GOCHAR · TRANSIT CHART · LAHIRI</p></div></div>
+      <div class="seg"><button class="on">Western</button><button>देवनागरी</button></div>
+    </header>
+    <div class="rule"></div>
+    <div class="grid2">
+      <div class="chartwrap">
+        <svg class="chart" viewBox="0 0 400 400">
+          <rect class="frame" x="2" y="2" width="396" height="396" rx="6"/>
+          <line class="grid" x1="2" y1="2" x2="398" y2="398"/>
+          <line class="grid" x1="398" y1="2" x2="2" y2="398"/>
+          <polygon class="grid" points="200,2 398,200 200,398 2,200"/>
+          <g text-anchor="middle">
+            <text class="snum" x="200" y="56">1</text><text class="pl go" x="200" y="105">Ju</text>
+            <text class="snum" x="118" y="38">2</text>
+            <text class="snum" x="44" y="94">3</text><text class="pl" x="58" y="118">Su Me</text>
+            <text class="snum" x="58" y="198">4</text><text class="pl ru" x="100" y="206">Ve</text>
+            <text class="snum" x="44" y="310">5</text><text class="pl em" x="58" y="296">Ra</text>
+            <text class="snum" x="118" y="366">6</text>
+            <text class="snum" x="200" y="348">7</text><text class="pl sa" x="200" y="312">Mo</text>
+            <text class="snum" x="284" y="366">8</text>
+            <text class="snum" x="356" y="310">9</text>
+            <text class="snum" x="346" y="198">10</text><text class="pl sa" x="304" y="206">Sa</text>
+            <text class="snum" x="356" y="94">11</text><text class="pl ru" x="320" y="118">Ma Ke</text>
+            <text class="snum" x="284" y="38">12</text>
+          </g>
+        </svg>
+      </div>
+      <div class="panel">
+        <div class="field"><label>House 1 sign (Lagna)</label>
+          <select><option>Aries · Mesha</option><option>Taurus · Vrishabha</option><option>Gemini · Mithuna</option><option>Cancer · Karka</option><option>Leo · Simha</option></select>
+        </div>
+        <div class="field"><label>Transition planets</label>
+          <div class="chips">
+            <span class="chip on"><span class="dot" style="background:var(--gold);color:var(--gold)"></span>Sun</span>
+            <span class="chip off">Moon</span>
+            <span class="chip on"><span class="dot" style="background:var(--ruby);color:var(--ruby)"></span>Mars</span>
+            <span class="chip on"><span class="dot" style="background:var(--emerald);color:var(--emerald)"></span>Merc</span>
+            <span class="chip on"><span class="dot" style="background:var(--gold);color:var(--gold)"></span>Jup</span>
+            <span class="chip on"><span class="dot" style="background:var(--ruby);color:var(--ruby)"></span>Ven</span>
+            <span class="chip on"><span class="dot" style="background:var(--sapphire);color:var(--sapphire)"></span>Sat</span>
+            <span class="chip on"><span class="dot" style="background:var(--emerald);color:var(--emerald)"></span>Ra/Ke</span>
+          </div>
+        </div>
+        <div class="readout"><div class="lbl">Viewing</div><div class="val">29 Jun 2026 · 18:22</div></div>
+      </div>
+    </div>
+    <div class="timebar">
+      <div class="timehead"><span class="ttl">Timeline</span>
+        <div class="range-seg"><button class="on">±1y</button><button>±5y</button><button>±10y</button></div>
+      </div>
+      <div class="track">
+        <div class="rail"></div><div class="fill"></div>
+        <div class="tdot go" style="left:12%"></div><div class="tdot em" style="left:23%"></div>
+        <div class="tdot ru" style="left:38%"></div><div class="tdot sa" style="left:61%"></div>
+        <div class="tdot em" style="left:74%"></div><div class="tdot go" style="left:88%"></div>
+        <div class="now" style="left:52%"></div><div class="handle"></div>
+      </div>
+      <div class="scale"><span>Jun 2025</span><span>Dec 2025</span><span>Jun 2026</span><span>Dec 2026</span><span>Jun 2027</span></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
