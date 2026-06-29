@@ -5,8 +5,8 @@ import { PlanetFilter } from "./components/PlanetFilter";
 import { TimeSlider } from "./components/TimeSlider";
 import { signAt, transitionsInRange, type TransitData } from "./lib/transits";
 import { fmtDateTime } from "./lib/format";
+import { GRAHAS } from "./lib/signs";
 
-const GRAHAS = ["sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn", "rahu", "ketu"];
 const MONTH_MS = 2629800000; // ~30.44 days
 const RANGES: { months: number; label: string }[] = [
   { months: 3, label: "3M" },

@@ -1,11 +1,22 @@
-from datetime import datetime
+from datetime import datetime, timezone
 import swisseph as swe
+
+
+def iso(dt: datetime) -> str:
+    return dt.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
 
 # Swiss Ephemeris body ids; Rahu = mean lunar node, Ketu = node + 180 degrees.
 PLANETS: dict[str, int] = {
-    "sun": swe.SUN, "moon": swe.MOON, "mars": swe.MARS,
-    "mercury": swe.MERCURY, "jupiter": swe.JUPITER, "venus": swe.VENUS,
-    "saturn": swe.SATURN, "rahu": swe.MEAN_NODE, "ketu": swe.MEAN_NODE,
+    "sun": swe.SUN,
+    "moon": swe.MOON,
+    "mars": swe.MARS,
+    "mercury": swe.MERCURY,
+    "jupiter": swe.JUPITER,
+    "venus": swe.VENUS,
+    "saturn": swe.SATURN,
+    "rahu": swe.MEAN_NODE,
+    "ketu": swe.MEAN_NODE,
 }
 
 _FLAGS = swe.FLG_SIDEREAL | swe.FLG_MOSEPH

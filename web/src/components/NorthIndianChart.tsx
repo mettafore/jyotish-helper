@@ -1,4 +1,4 @@
-import { houseOfSign } from "../lib/signs";
+import { houseOfSign, GRAHA_COLOR } from "../lib/signs";
 
 const ABBR: Record<string, string> = {
   sun: "Su", moon: "Mo", mars: "Ma", mercury: "Me", jupiter: "Ju",
@@ -10,11 +10,6 @@ const ABBR_DEVA: Record<string, string> = {
 };
 const DEVA_NUM = ["०", "१", "२", "३", "४", "५", "६", "७", "८", "९"];
 const toDeva = (n: number) => String(n).split("").map((d) => DEVA_NUM[+d]).join("");
-const COLOR: Record<string, string> = {
-  sun: "var(--gr-su)", moon: "var(--gr-mo)", mars: "var(--gr-ma)", mercury: "var(--gr-me)",
-  jupiter: "var(--gr-ju)", venus: "var(--gr-ve)", saturn: "var(--gr-sa)",
-  rahu: "var(--gr-ra)", ketu: "var(--gr-ke)",
-};
 // House centroids (x,y) at viewBox 400 — from jyotish-design-standards.
 const CENTROID: Record<number, [number, number]> = {
   1: [200, 105], 2: [118, 40], 3: [58, 118], 4: [100, 206], 5: [58, 296], 6: [118, 366],
@@ -65,7 +60,7 @@ export function NorthIndianChart(
           <text key={h} x={cx} y={cy} textAnchor="middle"
                 fontFamily="Sora, sans-serif" fontWeight={600} fontSize={15}>
             {planets.map((p, i) => (
-              <tspan key={p} fill={COLOR[p]} dx={i ? 6 : 0}>{abbr[p]}</tspan>
+              <tspan key={p} fill={GRAHA_COLOR[p]} dx={i ? 6 : 0}>{abbr[p]}</tspan>
             ))}
           </text>
         );

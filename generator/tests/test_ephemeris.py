@@ -4,7 +4,15 @@ from jyotish_gen.ephemeris import PLANETS, to_jd, longitude, sign_of
 
 def test_all_nine_grahas_present():
     assert set(PLANETS) == {
-        "sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn", "rahu", "ketu"
+        "sun",
+        "moon",
+        "mars",
+        "mercury",
+        "jupiter",
+        "venus",
+        "saturn",
+        "rahu",
+        "ketu",
     }
 
 

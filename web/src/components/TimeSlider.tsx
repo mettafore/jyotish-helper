@@ -1,10 +1,5 @@
 import { fmtDate } from "../lib/format";
-
-const GR_COLOR: Record<string, string> = {
-  sun: "var(--gr-su)", moon: "var(--gr-mo)", mars: "var(--gr-ma)", mercury: "var(--gr-me)",
-  jupiter: "var(--gr-ju)", venus: "var(--gr-ve)", saturn: "var(--gr-sa)",
-  rahu: "var(--gr-ra)", ketu: "var(--gr-ke)",
-};
+import { GRAHA_COLOR } from "../lib/signs";
 
 export function pct(t: Date, start: Date, end: Date): number {
   return ((t.getTime() - start.getTime()) / (end.getTime() - start.getTime())) * 100;
@@ -37,7 +32,7 @@ export function TimeSlider(
           className="tdot"
           style={{
             position: "absolute", left: `${pct(ev.at, start, end)}%`,
-            borderColor: GR_COLOR[ev.planet],
+            borderColor: GRAHA_COLOR[ev.planet],
           }} />
       ))}
       {nowIn && (
