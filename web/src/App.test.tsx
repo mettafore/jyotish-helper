@@ -39,6 +39,13 @@ describe("App", () => {
     expect(screen.getByText(/1Y/)).toBeInTheDocument();
   });
 
+  it("defaults the range preset to 3M", async () => {
+    const { container } = render(<App />);
+    await waitFor(() => expect(screen.getByText("Ju")).toBeInTheDocument());
+    const active = container.querySelector(".range-seg button.on");
+    expect(active?.textContent).toContain("3M");
+  });
+
   it("Today button returns the viewed date to now after scrubbing away", async () => {
     render(<App />);
     await waitFor(() => expect(screen.getByText("Ju")).toBeInTheDocument());

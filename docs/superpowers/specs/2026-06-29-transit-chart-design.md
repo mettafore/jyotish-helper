@@ -84,7 +84,7 @@ Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn, Rahu, Ketu. Moon is fast
 
 ### Time slider (single control)
 
-- Range presets: **±3M / ±6M / ±1Y / ±5Y / ±10Y** (default **±1Y**), as a band
+- Range presets: **±3M / ±6M / ±1Y / ±5Y / ±10Y** (default **±3M**), as a band
   around the viewed date, clamped to the fixed 2015–2040 data window.
 - **Drag handle:** free scrub to any date; chart updates live (cheap lookup).
 - **Transition dots:** sign-change events render as clickable dot buttons on the

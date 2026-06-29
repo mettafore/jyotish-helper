@@ -21,7 +21,7 @@ export default function App() {
   const [value, setValue] = useState<Date>(new Date());
   const [house1Sign, setHouse1Sign] = useState(0);
   const [script, setScript] = useState<"western" | "devanagari">("western");
-  const [rangeMonths, setRangeMonths] = useState(12);
+  const [rangeMonths, setRangeMonths] = useState(3);
   const [enabled, setEnabled] = useState<Record<string, boolean>>(
     Object.fromEntries(GRAHAS.map((g) => [g, g !== "moon"])), // Moon off by default
   );
