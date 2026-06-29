@@ -30,7 +30,7 @@ export function TimeSlider(
       {events.map((ev, i) => (
         <button key={i} type="button"
           aria-label={`${ev.planet} transition`}
-          title={`${ev.planet} → sign ${ev.sign + 1}`}
+          title={`${ev.planet[0].toUpperCase()}${ev.planet.slice(1)} → sign ${ev.sign + 1}  ·  ${ev.at.toLocaleDateString()}`}
           onClick={() => onChange(ev.at)}
           className="tdot"
           style={{
