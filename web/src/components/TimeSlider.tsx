@@ -39,7 +39,9 @@ export function TimeSlider(
           }} />
       ))}
       {nowIn && (
-        <div className="now" style={{ position: "absolute", left: `${pct(now, start, end)}%` }} />
+        <button type="button" className="now" aria-label="jump to now"
+          title="Jump to now" onClick={() => onChange(new Date())}
+          style={{ position: "absolute", left: `${pct(now, start, end)}%` }} />
       )}
     </div>
   );

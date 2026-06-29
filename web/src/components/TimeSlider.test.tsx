@@ -26,6 +26,20 @@ describe("TimeSlider", () => {
     expect(onChange).toHaveBeenCalledWith(at);
   });
 
+  it("renders a clickable Now button that jumps to the present", () => {
+    const onChange = vi.fn();
+    const nowStart = new Date(Date.now() - 86400000);
+    const nowEnd = new Date(Date.now() + 86400000);
+    const { getByLabelText } = render(
+      <TimeSlider start={nowStart} end={nowEnd} value={nowStart} onChange={onChange}
+        events={[]} />,
+    );
+    fireEvent.click(getByLabelText(/jump to now/i));
+    expect(onChange).toHaveBeenCalledTimes(1);
+    const arg = onChange.mock.calls[0][0] as Date;
+    expect(Math.abs(arg.getTime() - Date.now())).toBeLessThan(5000);
+  });
+
   it("shows the transition date in the dot's tooltip", () => {
     const at = new Date("2026-03-29T00:00:00Z");
     const { getByLabelText } = render(
