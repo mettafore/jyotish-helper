@@ -42,7 +42,7 @@
 name = "jyotish-gen"
 version = "0.1.0"
 description = "Offline Swiss Ephemeris transition generator for Jyotish Helper"
-requires-python = ">=3.11"
+requires-python = ">=3.12,<3.14"
 dependencies = ["pyswisseph>=2.10"]
 
 [dependency-groups]
@@ -69,12 +69,19 @@ def test_import():
     import jyotish_gen  # noqa: F401
 ```
 
-- [ ] **Step 3: Sync and run the smoke test (verify it passes)**
+- [ ] **Step 3: Pin Python 3.12 (system is 3.14 — no pyswisseph wheels there yet)**
+
+Run (from `generator/`): `uv python pin 3.12`
+This writes `generator/.python-version` so uv uses 3.12 (which has prebuilt
+pyswisseph wheels) instead of the 3.14 system interpreter (source build, may fail).
+
+- [ ] **Step 4: Sync and run the smoke test (verify it passes)**
 
 Run (from `generator/`): `uv sync && uv run pytest -q`
-Expected: 1 passed. Also confirms `pyswisseph` installs and `uv.lock` is created.
+Expected: 1 passed. Also confirms `pyswisseph` installs from a wheel and `uv.lock` is created.
+If `pyswisseph` tries to build from source / fails, the Python pin didn't take — re-check Step 3.
 
-- [ ] **Step 4: Commit**
+- [ ] **Step 5: Commit**
 
 ```bash
 git add generator/ && git commit -m "feat(generator): scaffold uv package with pyswisseph"
