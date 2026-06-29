@@ -4,6 +4,7 @@ import { LagnaSelect } from "./components/LagnaSelect";
 import { PlanetFilter } from "./components/PlanetFilter";
 import { TimeSlider } from "./components/TimeSlider";
 import { signAt, transitionsInRange, type TransitData } from "./lib/transits";
+import { fmtDateTime } from "./lib/format";
 
 const GRAHAS = ["sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn", "rahu", "ketu"];
 const MONTH_MS = 2629800000; // ~30.44 days
@@ -87,7 +88,7 @@ export default function App() {
             </div>
             <div className="readout">
               <div className="lbl">Viewing</div>
-              <div className="val">{value.toLocaleString()}</div>
+              <div className="val">{fmtDateTime(value)}</div>
             </div>
           </div>
         </div>

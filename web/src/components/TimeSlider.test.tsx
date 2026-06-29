@@ -2,6 +2,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, fireEvent } from "@testing-library/react";
 import { TimeSlider, pct } from "./TimeSlider";
+import { fmtDate } from "../lib/format";
 
 const start = new Date("2025-01-01T00:00:00Z");
 const end = new Date("2027-01-01T00:00:00Z");
@@ -47,6 +48,6 @@ describe("TimeSlider", () => {
         events={[{ planet: "saturn", sign: 11, at }]} />,
     );
     const dot = getByLabelText(/saturn.*transition/i);
-    expect(dot.getAttribute("title")).toContain(at.toLocaleDateString());
+    expect(dot.getAttribute("title")).toContain(fmtDate(at));
   });
 });

@@ -2,6 +2,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import App from "./App";
+import { fmtDate } from "./lib/format";
 
 const fake = {
   ayanamsa: "lahiri",
@@ -43,7 +44,7 @@ describe("App", () => {
     await waitFor(() => expect(screen.getByText("Ju")).toBeInTheDocument());
     // Scrub to the far past edge of the range.
     fireEvent.change(screen.getByLabelText("scrub time"), { target: { value: "0" } });
-    const todayStr = new Date().toLocaleDateString();
+    const todayStr = fmtDate(new Date());
     // After scrubbing, the viewed date should no longer be today.
     expect(screen.queryByText((t) => t.includes(todayStr))).toBeNull();
     // Click Today -> back to now.

@@ -1,3 +1,5 @@
+import { fmtDate } from "../lib/format";
+
 const GR_COLOR: Record<string, string> = {
   sun: "var(--gr-su)", moon: "var(--gr-mo)", mars: "var(--gr-ma)", mercury: "var(--gr-me)",
   jupiter: "var(--gr-ju)", venus: "var(--gr-ve)", saturn: "var(--gr-sa)",
@@ -30,7 +32,7 @@ export function TimeSlider(
       {events.map((ev, i) => (
         <button key={i} type="button"
           aria-label={`${ev.planet} transition`}
-          title={`${ev.planet[0].toUpperCase()}${ev.planet.slice(1)} → sign ${ev.sign + 1}  ·  ${ev.at.toLocaleDateString()}`}
+          title={`${ev.planet[0].toUpperCase()}${ev.planet.slice(1)} → sign ${ev.sign + 1}  ·  ${fmtDate(ev.at)}`}
           onClick={() => onChange(ev.at)}
           className="tdot"
           style={{
