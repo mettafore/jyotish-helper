@@ -72,6 +72,20 @@ export default function App() {
           </div>
         </header>
 
+        <details className="howto">
+          <summary>How this works</summary>
+          <ul>
+            <li>The <b>North Indian chart</b> shows which sign each graha sits in
+              (Lahiri sidereal). Multiple grahas in one sign stack together.</li>
+            <li>Pick <b>House 1 sign (Lagna)</b> to rotate the houses over a
+              client's natal ascendant. Toggle <b>Western / देवनागरी</b> for sign names.</li>
+            <li>Drag the <b>time slider</b> to scrub the chart to any date. Dots mark
+              upcoming sign transitions — click one to jump to it. <b>Now</b> marks today.</li>
+            <li>Use <b>Transition planets</b> to choose which grahas show dots, and the
+              <b>±range</b> buttons to widen the window (Moon is off by default).</li>
+          </ul>
+        </details>
+
         <div className="grid2">
           <div className="chartwrap">
             <NorthIndianChart positions={positions} house1Sign={house1Sign} script={script} />
