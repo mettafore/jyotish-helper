@@ -97,6 +97,16 @@ cd web && vercel --prod --yes
 `vercel link` once before deploying. Push to `main` first so the deploy
 matches the repo.
 
+## Versioning
+
+Tag each release `vMAJOR.MINOR.PATCH` and **publish it as a GitHub Release**,
+not just a git tag — the Releases page and "Latest" badge only track published
+Releases. Use `gh`, never plain `git tag` alone:
+
+```sh
+gh release create v1.0.4 --title "v1.0.4" --notes "..." --latest
+```
+
 ## Test-driven development
 
 **Write tests first.** For every feature/bugfix, follow red→green→refactor:
