@@ -122,6 +122,10 @@ Keep units small and independently testable (see the spec's component split).
 in a turn, stage and commit with a clear Conventional Commits message before
 yielding. Keep commits small and reversible; never push unless asked.
 
+**Delete the branch after merging.** Once a feature branch lands on `main`
+(including fast-forward merges), delete it locally and on the remote
+(`git push origin --delete <branch>`). Don't leave merged branches lingering.
+
 > Note: a documented instruction relies on the agent following it. For
 > guaranteed automation regardless of agent, wire a **Stop hook** in
 > `settings.json` (`git add -A && git commit`) via the `update-config` skill.
