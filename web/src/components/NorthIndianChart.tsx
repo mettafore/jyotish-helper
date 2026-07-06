@@ -1,4 +1,4 @@
-import { houseOfSign, GRAHA_COLOR } from "../lib/signs";
+import { houseOfSign, dignity, GRAHA_COLOR } from "../lib/signs";
 
 const ABBR: Record<string, string> = {
   sun: "Su", moon: "Mo", mars: "Ma", mercury: "Me", jupiter: "Ju",
@@ -59,9 +59,15 @@ export function NorthIndianChart(
         return (
           <text key={h} x={cx} y={cy} textAnchor="middle"
                 fontFamily="Sora, sans-serif" fontWeight={600} fontSize={15}>
-            {planets.map((p, i) => (
-              <tspan key={p} fill={GRAHA_COLOR[p]} dx={i ? 6 : 0}>{abbr[p]}</tspan>
-            ))}
+            {planets.map((p, i) => {
+              const d = dignity(p, positions[p]);
+              const mark = d === "exalted" ? "⬆" : d === "debilitated" ? "⬇" : "";
+              return (
+                <tspan key={p} fill={GRAHA_COLOR[p]} dx={i ? 6 : 0}>
+                  {abbr[p]}{mark && <tspan fontSize={10}>{mark}</tspan>}
+                </tspan>
+              );
+            })}
           </text>
         );
       })}

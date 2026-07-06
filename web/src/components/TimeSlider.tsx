@@ -27,7 +27,7 @@ export function TimeSlider(
       {events.map((ev, i) => (
         <button key={i} type="button"
           aria-label={`${ev.planet} transition`}
-          title={`${ev.planet[0].toUpperCase()}${ev.planet.slice(1)} → sign ${ev.sign + 1}  ·  ${fmtDate(ev.at)}`}
+          data-tip={`${ev.planet[0].toUpperCase()}${ev.planet.slice(1)} → sign ${ev.sign + 1} · ${fmtDate(ev.at)}`}
           onClick={() => onChange(ev.at)}
           className="tdot"
           style={{

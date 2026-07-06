@@ -20,4 +20,27 @@ describe("NorthIndianChart", () => {
     expect(getByText("श")).toBeInTheDocument();  // Saturn
     expect(queryByText("Su")).toBeNull();
   });
+
+  it("marks an exalted graha with ⬆", () => {
+    const { getByText } = render(
+      <NorthIndianChart positions={{ sun: 0 }} house1Sign={0} />, // Sun in Aries
+    );
+    expect(getByText(/Su/).textContent).toContain("⬆");
+  });
+
+  it("marks a debilitated graha with ⬇", () => {
+    const { getByText } = render(
+      <NorthIndianChart positions={{ saturn: 0 }} house1Sign={0} />, // Saturn in Aries
+    );
+    expect(getByText(/Sa/).textContent).toContain("⬇");
+  });
+
+  it("adds no mark for neutral placements", () => {
+    const { getByText } = render(
+      <NorthIndianChart positions={{ sun: 4 }} house1Sign={0} />, // Sun in Leo
+    );
+    const t = getByText(/Su/).textContent ?? "";
+    expect(t).not.toContain("⬆");
+    expect(t).not.toContain("⬇");
+  });
 });

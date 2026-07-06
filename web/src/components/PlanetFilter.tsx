@@ -1,14 +1,14 @@
-import { GRAHAS, GRAHA_COLOR } from "../lib/signs";
-
-const LABEL: Record<string, string> = {
-  sun: "Sun", moon: "Moon", mars: "Mars", mercury: "Merc", jupiter: "Jup",
-  venus: "Ven", saturn: "Sat", rahu: "Rahu", ketu: "Ketu",
-};
+import { GRAHAS, GRAHA_COLOR, PLANET_WESTERN, PLANET_DEVANAGARI } from "../lib/signs";
 
 export function PlanetFilter(
-  { enabled, onToggle }:
-  { enabled: Record<string, boolean>; onToggle: (planet: string) => void },
+  { enabled, onToggle, script = "western" }:
+  {
+    enabled: Record<string, boolean>;
+    onToggle: (planet: string) => void;
+    script?: "western" | "devanagari";
+  },
 ) {
+  const label = script === "devanagari" ? PLANET_DEVANAGARI : PLANET_WESTERN;
   return (
     <div className="chips">
       {GRAHAS.map((p) => (
@@ -19,7 +19,7 @@ export function PlanetFilter(
             width: 7, height: 7, borderRadius: "50%", background: GRAHA_COLOR[p],
             display: "inline-block",
           }} />
-          {LABEL[p]}
+          {label[p]}
         </button>
       ))}
     </div>

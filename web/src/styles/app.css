@@ -75,20 +75,34 @@ select{width:100%;appearance:none;padding:11px 14px;border-radius:var(--r-contro
 .range-seg button{border:0;background:transparent;padding:5px 10px;border-radius:8px;
   cursor:pointer;color:var(--ink-soft);font-weight:600;}
 .range-seg button.on{background:#fff;color:var(--gold);box-shadow:0 2px 6px -3px rgba(150,110,40,.3);}
-.track{position:relative;height:46px;}
-.track input[type=range]{position:absolute;top:18px;left:0;width:100%;margin:0;
+.track{position:relative;height:64px;}
+.track input[type=range]{position:absolute;top:38px;left:0;width:100%;margin:0;
   accent-color:var(--gold);cursor:pointer;}
-.tdot{width:11px;height:11px;border-radius:50%;transform:translate(-50%,-50%);top:50%;
+/* Dots live in their own band above the rail so taps never land inside the
+   range input's hit box (which spans its whole element on touch). */
+.tdot{width:11px;height:11px;border-radius:50%;transform:translate(-50%,-50%);top:16px;
   background:#fffdf8;border:2px solid var(--gold);z-index:2;
   box-shadow:0 2px 6px -2px rgba(150,110,40,.4);cursor:pointer;padding:0;
+  touch-action:manipulation;
   transition:transform .12s ease, box-shadow .12s ease;}
+/* Invisible enlarged touch target (~29px) without growing the visible dot. */
+.tdot::before{content:"";position:absolute;inset:-9px;border-radius:50%;}
 .tdot:hover,.tdot:focus-visible{
   transform:translate(-50%,-50%) scale(1.7);z-index:6;outline:none;
   box-shadow:0 4px 12px -2px rgba(150,110,40,.6), 0 0 0 3px rgba(184,144,47,.18);}
-.now{position:absolute;top:6px;height:34px;width:14px;transform:translateX(-50%);
+/* Zero-delay tooltip driven by data-tip (native title has a fixed ~1s delay). */
+.tdot::after{content:attr(data-tip);position:absolute;bottom:150%;left:50%;
+  transform:translateX(-50%) scale(.588);/* counters the parent hover scale(1.7) */
+  background:var(--glass);border:1px solid var(--glass-brd);color:var(--ink);
+  font:600 11px var(--font-ui);letter-spacing:.02em;white-space:nowrap;
+  padding:5px 9px;border-radius:9px;pointer-events:none;opacity:0;
+  box-shadow:0 6px 18px -8px rgba(150,110,40,.45);
+  backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);}
+.tdot:hover::after,.tdot:focus-visible::after{opacity:1;}
+.now{position:absolute;top:4px;height:34px;width:14px;transform:translateX(-50%);
   background:transparent;border:0;padding:0;cursor:pointer;z-index:5;}
-.now::before{content:"";position:absolute;left:50%;top:12px;transform:translateX(-50%);
-  width:2px;height:30px;background:var(--saffron);border-radius:2px;
+.now::before{content:"";position:absolute;left:50%;top:10px;transform:translateX(-50%);
+  width:2px;height:44px;background:var(--saffron);border-radius:2px;
   transition:width .12s ease, box-shadow .12s ease;}
 .now::after{content:"Now";position:absolute;top:-5px;left:50%;transform:translateX(-50%);
   font-size:10px;font-weight:700;color:var(--saffron);}

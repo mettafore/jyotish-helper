@@ -41,13 +41,15 @@ describe("TimeSlider", () => {
     expect(Math.abs(arg.getTime() - Date.now())).toBeLessThan(5000);
   });
 
-  it("shows the transition date in the dot's tooltip", () => {
+  it("shows the transition date in an instant CSS tooltip, not a native title", () => {
     const at = new Date("2026-03-29T00:00:00Z");
     const { getByLabelText } = render(
       <TimeSlider start={start} end={end} value={start} onChange={() => {}}
         events={[{ planet: "saturn", sign: 11, at }]} />,
     );
     const dot = getByLabelText(/saturn.*transition/i);
-    expect(dot.getAttribute("title")).toContain(fmtDate(at));
+    // data-tip drives a zero-delay CSS tooltip; native title has a fixed ~1s delay.
+    expect(dot.getAttribute("data-tip")).toContain(fmtDate(at));
+    expect(dot.getAttribute("title")).toBeNull();
   });
 });

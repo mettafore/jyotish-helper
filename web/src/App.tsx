@@ -97,7 +97,7 @@ export default function App() {
             </div>
             <div className="field">
               <label>Transition planets</label>
-              <PlanetFilter enabled={enabled}
+              <PlanetFilter enabled={enabled} script={script}
                 onToggle={(p) => setEnabled((e) => ({ ...e, [p]: !e[p] }))} />
             </div>
             <div className="readout">
