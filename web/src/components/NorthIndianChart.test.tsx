@@ -43,4 +43,13 @@ describe("NorthIndianChart", () => {
     expect(t).not.toContain("⬆");
     expect(t).not.toContain("⬇");
   });
+
+  it("marks retrograde grahas with 🌀", () => {
+    const { getByText } = render(
+      <NorthIndianChart positions={{ mars: 4, jupiter: 5 }} house1Sign={0}
+        retro={{ mars: true }} />,
+    );
+    expect(getByText(/Ma/).textContent).toContain("🌀");
+    expect(getByText(/Ju/).textContent).not.toContain("🌀");
+  });
 });

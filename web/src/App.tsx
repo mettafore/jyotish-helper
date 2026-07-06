@@ -3,7 +3,9 @@ import { NorthIndianChart } from "./components/NorthIndianChart";
 import { LagnaSelect } from "./components/LagnaSelect";
 import { PlanetFilter } from "./components/PlanetFilter";
 import { TimeSlider } from "./components/TimeSlider";
+import { GrahaDegrees } from "./components/GrahaDegrees";
 import { signAt, transitionsInRange, type TransitData } from "./lib/transits";
+import { isRetrograde, type DegreesData } from "./lib/degrees";
 import { fmtDateTime } from "./lib/format";
 import { GRAHAS } from "./lib/signs";
 
@@ -26,8 +28,12 @@ export default function App() {
     Object.fromEntries(GRAHAS.map((g) => [g, g !== "moon"])), // Moon off by default
   );
 
+  const [degrees, setDegrees] = useState<DegreesData | null>(null);
+
   useEffect(() => {
     fetch("/data/transitions.json").then((r) => r.json()).then(setData);
+    fetch("/data/degrees.json").then((r) => r.json()).then(setDegrees)
+      .catch(() => {}); // degrees panel is optional; chart works without it
   }, []);
 
   const winStart = useMemo(() => new Date(data?.range.start ?? 0), [data]);
@@ -44,6 +50,11 @@ export default function App() {
   const rangeEnd = useMemo(
     () => new Date(Math.min(value.getTime() + rangeMonths * MONTH_MS, winEnd.getTime())),
     [value, rangeMonths, winEnd]);
+
+  const retro = useMemo(() => {
+    if (!degrees) return {};
+    return Object.fromEntries(GRAHAS.map((g) => [g, isRetrograde(degrees, g, value)]));
+  }, [degrees, value]);
 
   const events = useMemo(() => {
     if (!data) return [];
@@ -88,7 +99,8 @@ export default function App() {
 
         <div className="grid2">
           <div className="chartwrap">
-            <NorthIndianChart positions={positions} house1Sign={house1Sign} script={script} />
+            <NorthIndianChart positions={positions} house1Sign={house1Sign}
+                              script={script} retro={retro} />
           </div>
           <div className="panel">
             <div className="field">
@@ -104,6 +116,13 @@ export default function App() {
               <div className="lbl">Viewing</div>
               <div className="val">{fmtDateTime(value)}</div>
             </div>
+            {degrees && (
+              <div className="field">
+                {/* Daily 00:00 UTC samples — date-granular, so no time shown. */}
+                <label>Graha degrees · daily</label>
+                <GrahaDegrees data={degrees} date={value} script={script} />
+              </div>
+            )}
           </div>
         </div>
 

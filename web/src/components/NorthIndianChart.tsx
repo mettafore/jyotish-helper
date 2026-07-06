@@ -22,8 +22,13 @@ const SNUM: Record<number, [number, number]> = {
 };
 
 export function NorthIndianChart(
-  { positions, house1Sign, script = "western" }:
-  { positions: Record<string, number>; house1Sign: number; script?: "western" | "devanagari" },
+  { positions, house1Sign, script = "western", retro = {} }:
+  {
+    positions: Record<string, number>;
+    house1Sign: number;
+    script?: "western" | "devanagari";
+    retro?: Record<string, boolean>;
+  },
 ) {
   const abbr = script === "devanagari" ? ABBR_DEVA : ABBR;
   const num = (n: number) => (script === "devanagari" ? toDeva(n) : String(n));
@@ -61,7 +66,8 @@ export function NorthIndianChart(
                 fontFamily="Sora, sans-serif" fontWeight={600} fontSize={15}>
             {planets.map((p, i) => {
               const d = dignity(p, positions[p]);
-              const mark = d === "exalted" ? "⬆" : d === "debilitated" ? "⬇" : "";
+              const mark = (d === "exalted" ? "⬆" : d === "debilitated" ? "⬇" : "")
+                + (retro[p] ? "🌀" : "");
               return (
                 <tspan key={p} fill={GRAHA_COLOR[p]} dx={i ? 6 : 0}>
                   {abbr[p]}{mark && <tspan fontSize={10}>{mark}</tspan>}
