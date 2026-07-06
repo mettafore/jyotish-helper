@@ -36,6 +36,20 @@ export function isRetrograde(data: DegreesData, planet: string, d: Date): boolea
   return step(arr[i], arr[i + 1]) < 0;
 }
 
+// Combustion orbs (degrees from the Sun), per the project's school:
+// 15° generally, 10° for Mercury. Stated in the UI wherever 🔥 is explained.
+export const COMBUST_ORB_DEFAULT = 15;
+export const COMBUST_ORB_MERCURY = 10;
+
+export function isCombust(data: DegreesData, planet: string, d: Date): boolean {
+  if (planet === "sun" || planet === "rahu" || planet === "ketu") return false;
+  const sun = data.planets.sun;
+  if (!sun || !data.planets[planet]) return false;
+  const sep = Math.abs(step(longitudeAt(data, "sun", d), longitudeAt(data, planet, d)));
+  const orb = planet === "mercury" ? COMBUST_ORB_MERCURY : COMBUST_ORB_DEFAULT;
+  return sep < orb;
+}
+
 export function degreeInSign(lon: number): { sign: number; deg: number } {
   const sign = Math.floor((lon % 360) / 30);
   return { sign, deg: Math.round((lon - sign * 30) * 100) / 100 };

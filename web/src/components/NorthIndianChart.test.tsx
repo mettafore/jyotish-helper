@@ -52,4 +52,13 @@ describe("NorthIndianChart", () => {
     expect(getByText(/Ma/).textContent).toContain("🌀");
     expect(getByText(/Ju/).textContent).not.toContain("🌀");
   });
+
+  it("marks combust grahas with 🔥", () => {
+    const { getByText } = render(
+      <NorthIndianChart positions={{ venus: 4, jupiter: 5 }} house1Sign={0}
+        combust={{ venus: true }} />,
+    );
+    expect(getByText(/Ve/).textContent).toContain("🔥");
+    expect(getByText(/Ju/).textContent).not.toContain("🔥");
+  });
 });

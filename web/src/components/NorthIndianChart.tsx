@@ -22,12 +22,13 @@ const SNUM: Record<number, [number, number]> = {
 };
 
 export function NorthIndianChart(
-  { positions, house1Sign, script = "western", retro = {} }:
+  { positions, house1Sign, script = "western", retro = {}, combust = {} }:
   {
     positions: Record<string, number>;
     house1Sign: number;
     script?: "western" | "devanagari";
     retro?: Record<string, boolean>;
+    combust?: Record<string, boolean>;
   },
 ) {
   const abbr = script === "devanagari" ? ABBR_DEVA : ABBR;
@@ -67,7 +68,7 @@ export function NorthIndianChart(
             {planets.map((p, i) => {
               const d = dignity(p, positions[p]);
               const mark = (d === "exalted" ? "⬆" : d === "debilitated" ? "⬇" : "")
-                + (retro[p] ? "🌀" : "");
+                + (combust[p] ? "🔥" : "") + (retro[p] ? "🌀" : "");
               return (
                 <tspan key={p} fill={GRAHA_COLOR[p]} dx={i ? 6 : 0}>
                   {abbr[p]}{mark && <tspan fontSize={10}>{mark}</tspan>}

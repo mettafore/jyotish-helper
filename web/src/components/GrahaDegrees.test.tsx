@@ -10,24 +10,27 @@ const data: DegreesData = {
   stepDays: 1,
   planets: {
     sun: [100.0, 101.0],
-    mars: [20.5, 19.9], // retrograde
+    mars: [20.5, 19.9],    // retrograde, far from Sun
+    venus: [110.0, 111.0], // 10° from Sun -> combust at 15° orb
   },
 };
 const date = new Date("2020-01-01T12:00:00Z");
 
 describe("GrahaDegrees", () => {
   it("shows each graha's degree within its sign", () => {
-    const { getByText } = render(<GrahaDegrees data={data} date={date} script="western" />);
+    const { getByText, getAllByText } = render(
+      <GrahaDegrees data={data} date={date} script="western" />,
+    );
     expect(getByText("10.0°")).toBeInTheDocument(); // Sun 100° -> 10° Cancer
-    expect(getByText("Cancer")).toBeInTheDocument();
+    expect(getAllByText("Cancer").length).toBe(2);  // Sun and Venus
     expect(getByText("20.5°")).toBeInTheDocument(); // Mars 20.5° Aries
   });
 
   it("uses Devanagari sign names when script=devanagari", () => {
-    const { getByText, queryByText } = render(
+    const { getAllByText, queryByText } = render(
       <GrahaDegrees data={data} date={date} script="devanagari" />,
     );
-    expect(getByText("कर्क")).toBeInTheDocument();
+    expect(getAllByText("कर्क").length).toBe(2);
     expect(queryByText("Cancer")).toBeNull();
   });
 
@@ -37,5 +40,18 @@ describe("GrahaDegrees", () => {
     expect(marsRow.textContent).toContain("🌀");
     const sunRow = getByText("10.0°").closest("li")!;
     expect(sunRow.textContent).not.toContain("🌀");
+  });
+
+  it("marks combust grahas with 🔥", () => {
+    const { getByText } = render(<GrahaDegrees data={data} date={date} script="western" />);
+    const venusRow = getByText("20.0°").closest("li")!; // Venus 110° = 20° Cancer
+    expect(venusRow.textContent).toContain("🔥");
+    const marsRow = getByText("20.5°").closest("li")!;
+    expect(marsRow.textContent).not.toContain("🔥");
+  });
+
+  it("states the combustion-orb assumptions", () => {
+    const { getByText } = render(<GrahaDegrees data={data} date={date} script="western" />);
+    expect(getByText(/15°.*Mercury 10°/).textContent).toMatch(/🔥/);
   });
 });

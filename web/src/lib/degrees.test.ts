@@ -1,5 +1,7 @@
 import { describe, it, expect } from "vitest";
-import { longitudeAt, isRetrograde, degreeInSign, type DegreesData } from "./degrees";
+import {
+  longitudeAt, isRetrograde, isCombust, degreeInSign, type DegreesData,
+} from "./degrees";
 
 const data: DegreesData = {
   ayanamsa: "lahiri",
@@ -43,6 +45,40 @@ describe("isRetrograde", () => {
   it("never marks the always-retrograde nodes", () => {
     expect(isRetrograde(data, "rahu", day(1))).toBe(false);
     expect(isRetrograde(data, "ketu", day(1))).toBe(false);
+  });
+});
+
+describe("isCombust", () => {
+  // Orbs per school: 15° from the Sun generally, 10° for Mercury.
+  const d: DegreesData = {
+    ayanamsa: "lahiri",
+    start: "2020-01-01T00:00:00Z",
+    stepDays: 1,
+    planets: {
+      sun: [100.0, 359.0],
+      mercury: [109.0, 111.0], // 9° away (combust), then 112° away on day 1
+      venus: [114.0, 10.0],    // 14° away (combust); day 1: 11° across the wrap
+      mars: [116.0, 200.0],    // 16° away (not combust)
+      jupiter: [86.0, 200.0],  // 14° on the other side (combust)
+      rahu: [101.0, 101.0],    // nodes never combust
+    },
+  };
+  const day0 = new Date("2020-01-01T12:00:00Z");
+  const day1 = new Date("2020-01-02T12:00:00Z");
+
+  it("uses 15° generally and 10° for Mercury", () => {
+    expect(isCombust(d, "mercury", day0)).toBe(true);   // 9 < 10
+    expect(isCombust(d, "venus", day0)).toBe(true);     // 14 < 15
+    expect(isCombust(d, "mars", day0)).toBe(false);     // 16 > 15
+    expect(isCombust(d, "jupiter", day0)).toBe(true);   // 14 < 15, behind the Sun
+  });
+  it("measures separation across the 360° wrap", () => {
+    expect(isCombust(d, "venus", day1)).toBe(true);     // 359° vs 10° = 11° apart
+  });
+  it("never marks the Sun or the nodes", () => {
+    expect(isCombust(d, "sun", day0)).toBe(false);
+    expect(isCombust(d, "rahu", day0)).toBe(false);
+    expect(isCombust(d, "ketu", day0)).toBe(false);
   });
 });
 

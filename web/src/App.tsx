@@ -5,7 +5,7 @@ import { PlanetFilter } from "./components/PlanetFilter";
 import { TimeSlider } from "./components/TimeSlider";
 import { GrahaDegrees } from "./components/GrahaDegrees";
 import { signAt, transitionsInRange, type TransitData } from "./lib/transits";
-import { isRetrograde, type DegreesData } from "./lib/degrees";
+import { isRetrograde, isCombust, type DegreesData } from "./lib/degrees";
 import { fmtDateTime } from "./lib/format";
 import { GRAHAS } from "./lib/signs";
 
@@ -56,6 +56,11 @@ export default function App() {
     return Object.fromEntries(GRAHAS.map((g) => [g, isRetrograde(degrees, g, value)]));
   }, [degrees, value]);
 
+  const combust = useMemo(() => {
+    if (!degrees) return {};
+    return Object.fromEntries(GRAHAS.map((g) => [g, isCombust(degrees, g, value)]));
+  }, [degrees, value]);
+
   const events = useMemo(() => {
     if (!data) return [];
     const planets = GRAHAS.filter((g) => enabled[g]);
@@ -100,7 +105,7 @@ export default function App() {
         <div className="grid2">
           <div className="chartwrap">
             <NorthIndianChart positions={positions} house1Sign={house1Sign}
-                              script={script} retro={retro} />
+                              script={script} retro={retro} combust={combust} />
           </div>
           <div className="panel">
             <div className="field">
