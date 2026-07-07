@@ -52,6 +52,8 @@
   --hl:rgba(255,255,255,.7);        /* inset top highlight */
   --dot:#fffdf8;                    /* slider transition dot fill */
   --chart-bg:rgba(255,252,244,.4);  /* North Indian chart interior */
+  --shadow-rgb:150,110,40;          /* accent-shadow color, various alphas */
+  --shadow-rgb2:184,144,47;         /* tdot focus-ring color */
 }
 
 :root[data-theme="dark"]{
@@ -68,6 +70,7 @@
   /* neutral surfaces */
   --surface:rgba(255,255,255,.06); --surface-on:rgba(255,255,255,.10);
   --hl:rgba(255,255,255,.06); --dot:#e8e2d6; --chart-bg:rgba(255,255,255,.045);
+  --shadow-rgb:0,0,0; --shadow-rgb2:0,0,0;
   /* per-graha — lightened for legibility on near-black */
   --gr-su:#f0932e; --gr-mo:#9aa8ad; --gr-ma:#e46b57; --gr-me:#45b088;
   --gr-ju:#e0c05a; --gr-ve:#c48fcc; --gr-sa:#7c9ed0; --gr-ra:#b39a72; --gr-ke:#c2a17f;

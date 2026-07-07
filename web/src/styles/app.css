@@ -33,7 +33,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;}
   border:1px solid var(--line);border-radius:12px;font-size:12px;}
 .seg button{border:0;background:transparent;padding:6px 12px;border-radius:9px;
   cursor:pointer;color:var(--ink-soft);font-weight:500;}
-.seg button.on{background:var(--surface-on);color:var(--gold);box-shadow:0 2px 8px -3px rgba(150,110,40,.3);}
+.seg button.on{background:var(--surface-on);color:var(--gold);box-shadow:0 2px 8px -3px rgba(var(--shadow-rgb),.3);}
 .howto{margin-top:16px;border:1px solid var(--line);border-radius:var(--r-control);
   background:var(--surface);padding:0 16px;}
 .howto summary{cursor:pointer;list-style:none;padding:12px 0;font-size:11px;
@@ -85,13 +85,13 @@ select{width:100%;appearance:none;padding:11px 14px;border-radius:var(--r-contro
 .today-btn{border:1px solid var(--line);background:var(--surface);
   color:var(--gold);font-weight:600;font-size:12px;padding:6px 14px;
   border-radius:var(--r-pill);cursor:pointer;
-  box-shadow:0 2px 8px -4px rgba(150,110,40,.3);}
+  box-shadow:0 2px 8px -4px rgba(var(--shadow-rgb),.3);}
 .today-btn:hover{background:var(--surface-on);}
 .range-seg{display:flex;gap:2px;padding:3px;background:var(--surface);
   border:1px solid var(--line);border-radius:11px;font-size:11px;}
 .range-seg button{border:0;background:transparent;padding:5px 10px;border-radius:8px;
   cursor:pointer;color:var(--ink-soft);font-weight:600;}
-.range-seg button.on{background:var(--surface-on);color:var(--gold);box-shadow:0 2px 6px -3px rgba(150,110,40,.3);}
+.range-seg button.on{background:var(--surface-on);color:var(--gold);box-shadow:0 2px 6px -3px rgba(var(--shadow-rgb),.3);}
 .track{position:relative;height:64px;}
 .track input[type=range]{position:absolute;top:38px;left:0;width:100%;margin:0;
   accent-color:var(--gold);cursor:pointer;}
@@ -99,21 +99,21 @@ select{width:100%;appearance:none;padding:11px 14px;border-radius:var(--r-contro
    range input's hit box (which spans its whole element on touch). */
 .tdot{width:11px;height:11px;border-radius:50%;transform:translate(-50%,-50%);top:16px;
   background:var(--dot);border:2px solid var(--gold);z-index:2;
-  box-shadow:0 2px 6px -2px rgba(150,110,40,.4);cursor:pointer;padding:0;
+  box-shadow:0 2px 6px -2px rgba(var(--shadow-rgb),.4);cursor:pointer;padding:0;
   touch-action:manipulation;
   transition:transform .12s ease, box-shadow .12s ease;}
 /* Invisible enlarged touch target (~29px) without growing the visible dot. */
 .tdot::before{content:"";position:absolute;inset:-9px;border-radius:50%;}
 .tdot:hover,.tdot:focus-visible{
   transform:translate(-50%,-50%) scale(1.7);z-index:6;outline:none;
-  box-shadow:0 4px 12px -2px rgba(150,110,40,.6), 0 0 0 3px rgba(184,144,47,.18);}
+  box-shadow:0 4px 12px -2px rgba(var(--shadow-rgb),.6), 0 0 0 3px rgba(var(--shadow-rgb2),.18);}
 /* Zero-delay tooltip driven by data-tip (native title has a fixed ~1s delay). */
 .tdot::after{content:attr(data-tip);position:absolute;bottom:150%;left:50%;
   transform:translateX(-50%) scale(.588);/* counters the parent hover scale(1.7) */
   background:var(--glass);border:1px solid var(--glass-brd);color:var(--ink);
   font:600 11px var(--font-ui);letter-spacing:.02em;white-space:nowrap;
   padding:5px 9px;border-radius:9px;pointer-events:none;opacity:0;
-  box-shadow:0 6px 18px -8px rgba(150,110,40,.45);
+  box-shadow:0 6px 18px -8px rgba(var(--shadow-rgb),.45);
   backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);}
 .tdot:hover::after,.tdot:focus-visible::after{opacity:1;}
 .now{position:absolute;top:4px;height:34px;width:14px;transform:translateX(-50%);
