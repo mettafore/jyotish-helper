@@ -141,6 +141,13 @@ Keep units small and independently testable (see the spec's component split).
 in a turn, stage and commit with a clear Conventional Commits message before
 yielding. Keep commits small and reversible; never push unless asked.
 
+**Run `/code-review` and `/security-review` before merging a feature branch
+into `main`.** Both must come back clean (or findings explicitly triaged) —
+don't merge on unreviewed diffs. Run these in a **separate subagent**
+(`isolation: remote` or a fresh `Agent` call), not the same agent/context that
+wrote the code — a reviewer sharing the author's context inherits its blind
+spots and rubber-stamps its own assumptions.
+
 **Delete the branch after merging.** Once a feature branch lands on `main`
 (including fast-forward merges), delete it locally and on the remote
 (`git push origin --delete <branch>`). Don't leave merged branches lingering.
@@ -159,8 +166,10 @@ yielding. Keep commits small and reversible; never push unless asked.
   ad-hoc colors/fonts — reference the tokens. Skip only for backend/generator code.
 - **`vercel-react-best-practices`** (external) — apply when writing/refactoring
   React. Install: `npx skills add https://github.com/vercel-labs/agent-skills --skill vercel-react-best-practices`
-- **`/code-review`** on diffs before commit; **`/security-review`** before any
-  deploy. (Both ship with the harness — trusted, no external supply chain.)
+- **`/code-review`** and **`/security-review`** before merging a feature
+  branch into `main`, run in a **separate subagent** from the one that wrote
+  the code (see "Auto-commit" above). Both ship with the harness — trusted,
+  no external supply chain.
 - **`update-documentation`** (project skill) — run after merging a branch to
   `main` or cutting a release, to keep `README.md` and `docs/architecture.md`
   in sync with what actually shipped.
