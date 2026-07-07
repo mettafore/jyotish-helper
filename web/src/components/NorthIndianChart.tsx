@@ -44,7 +44,7 @@ export function NorthIndianChart(
 
   return (
     <svg className="chart" viewBox="0 0 400 400" style={{ width: "100%", display: "block" }}>
-      <rect x="2" y="2" width="396" height="396" rx="6" fill="rgba(255,252,244,.4)"
+      <rect x="2" y="2" width="396" height="396" rx="6" fill="var(--chart-bg)"
             stroke="var(--gold)" strokeWidth="1.5" />
       <line x1="2" y1="2" x2="398" y2="398" stroke="var(--gold)" strokeWidth="1.1" opacity=".7" />
       <line x1="398" y1="2" x2="2" y2="398" stroke="var(--gold)" strokeWidth="1.1" opacity=".7" />
