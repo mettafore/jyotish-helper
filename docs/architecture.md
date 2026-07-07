@@ -6,21 +6,21 @@ Three views of the same system: no backend, static JSON in, browser-only renderi
 
 ```mermaid
 flowchart LR
-    subgraph offline["Offline (generator/, runs by hand)"]
-        eph["pyswisseph<br/>Moshier mode, Lahiri ayanamsa"]
+    subgraph offline["Offline generator, runs by hand"]
+        eph["pyswisseph: Moshier mode, Lahiri ayanamsa"]
         gen["jyotish_gen.build"]
         eph --> gen
     end
 
-    subgraph data["Static JSON (committed, web/public/data/)"]
-        trans["transitions.json<br/>sign-change timestamps per graha"]
-        deg["degrees.json<br/>daily sidereal longitude per graha"]
+    subgraph data["Static JSON, committed to web/public/data/"]
+        trans["transitions.json: sign-change timestamps per graha"]
+        deg["degrees.json: daily sidereal longitude per graha"]
     end
 
-    subgraph client["Frontend (web/, static site on Vercel)"]
+    subgraph client["Frontend, static site on Vercel"]
         load["load JSON at page load"]
-        bsearch["binary search<br/>signAt / effectiveSignDegree / nextTransitionToday"]
-        render["React render<br/>NorthIndianChart, TimeSlider, GrahaDegrees"]
+        bsearch["binary search: signAt, effectiveSignDegree, nextTransitionToday"]
+        render["React render: NorthIndianChart, TimeSlider, GrahaDegrees"]
         load --> bsearch --> render
     end
 
@@ -28,10 +28,6 @@ flowchart LR
     gen --> deg
     trans --> load
     deg --> load
-
-    style offline fill:#f0e2c0,stroke:#b8902f
-    style data fill:#fffdf8,stroke:#b8902f
-    style client fill:#fbf4e6,stroke:#e08a2b
 ```
 
 No server, no DB, no astronomy at request time — the browser only ever does
@@ -41,19 +37,17 @@ lookups against data computed once, offline.
 
 ```mermaid
 flowchart TB
-    App["App<br/>state: value (Date), script, house1Sign,<br/>rangeMonths, enabled (planet filter)"]
+    App["App: state value Date, script, house1Sign, rangeMonths, enabled"]
 
-    App -->|"positions, house1Sign, script, retro, combust"| Chart["NorthIndianChart"]
-    App -->|"value, onChange"| Lagna["LagnaSelect"]
-    App -->|"enabled, script, onToggle"| Filter["PlanetFilter"]
-    App -->|"start, end, value, events, onChange"| Slider["TimeSlider"]
-    App -->|"data, transitions, date, script"| Degrees["GrahaDegrees"]
+    App -->|positions, house1Sign, script, retro, combust| Chart["NorthIndianChart"]
+    App -->|value, onChange| Lagna["LagnaSelect"]
+    App -->|enabled, script, onToggle| Filter["PlanetFilter"]
+    App -->|start, end, value, events, onChange| Slider["TimeSlider"]
+    App -->|data, transitions, date, script| Degrees["GrahaDegrees"]
 
-    Lagna -.->|"setHouse1Sign"| App
-    Filter -.->|"setEnabled"| App
-    Slider -.->|"setValue"| App
-
-    style App fill:#f0e2c0,stroke:#b8902f
+    Lagna -.->|setHouse1Sign| App
+    Filter -.->|setEnabled| App
+    Slider -.->|setValue| App
 ```
 
 All derived state (`positions`, `retro`, `combust`, `events`) is computed in
@@ -64,13 +58,10 @@ children are presentational, no child fetches or computes astrology data itself.
 
 ```mermaid
 flowchart LR
-    branch["feature branch"] -->|"tests green, /code-review, /security-review"| main["main"]
-    main -->|"gh release create vX.Y.Z"| release["GitHub Release"]
-    main -->|"vercel --prod --yes"| prod["Vercel production<br/>web-pi-kohl-36.vercel.app"]
-    main -.->|"update-readme skill"| readme["README.md"]
-
-    style main fill:#f0e2c0,stroke:#b8902f
-    style prod fill:#e08a2b,stroke:#b8902f,color:#fffdf8
+    branch["feature branch"] -->|tests green, code review, security review| main["main"]
+    main -->|gh release create| release["GitHub Release"]
+    main -->|vercel --prod --yes| prod["Vercel production: web-pi-kohl-36.vercel.app"]
+    main -.->|update-readme skill| readme["README.md"]
 ```
 
 Deploys always build from `main`, never an unmerged branch (see
