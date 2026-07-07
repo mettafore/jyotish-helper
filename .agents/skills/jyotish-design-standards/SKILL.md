@@ -109,6 +109,74 @@ border-radius: 30px;   /* cards. controls 13–16px, chips 20px pill */
 - **Handle:** 24px ivory circle, gold border, gradient core, soft shadow.
 - Range segmented control: ±1y / ±5y / ±10y.
 
+## Dark theme ("Obsidian")
+
+The app is dual-theme: **Light / Dark / Auto**, driven by `data-theme="light|dark"`
+on `<html>` (set pre-paint by an inline head script; managed by `useTheme`).
+Dark is the approved **Obsidian** direction: near-black warm-neutral surfaces,
+cream text, brightened gold, lightened graha colors. Same geometry, radii,
+blur, and fonts — dark is a token swap, never a layout change.
+
+Rules:
+
+- **Never hardcode a white/ivory surface.** Use the neutral-surface tokens —
+  they swap automatically in dark:
+
+| Token | Light | Dark | Use |
+|-------|-------|------|-----|
+| `--surface` | `rgba(255,255,255,.5)` | `rgba(255,255,255,.06)` | control / panel fills |
+| `--surface-on` | `#fff` | `rgba(255,255,255,.10)` | active seg button, hover fills |
+| `--hl` | `rgba(255,255,255,.7)` | `rgba(255,255,255,.06)` | inset top highlight |
+| `--dot` | `#fffdf8` | `#e8e2d6` | slider transition dot fill |
+
+- **Core tokens are re-valued in dark** (see the `:root[data-theme="dark"]`
+  block in [tokens.css](tokens.css)): `--bg1/--bg2` near-black, `--glass`
+  smoked, `--ink*` cream, `--gold #dcae4d`, `--saffron #f0a13c`,
+  `--gold-soft` becomes a translucent gold wash, shadows go black-based.
+- **Per-graha colors lighten in dark** for legibility on near-black — the
+  `--gr-*` vars swap automatically; keep referencing the vars and both themes
+  work for free.
+- Exceptions that deliberately stay fixed: the ॐ tile's `color:#fff` (white on
+  the saffron→gold gradient reads in both themes), and the light `body`
+  gradient's `#fff`/`#f7ead0` highlights (dark has its own
+  `:root[data-theme="dark"] body` override).
+- When adding any new color: define it as a token with a value in **both**
+  themes, and eyeball it against both backgrounds before shipping.
+
+## Dark theme ("Obsidian")
+
+The app is dual-theme: **Light / Dark / Auto**, driven by `data-theme="light|dark"`
+on `<html>` (set pre-paint by an inline head script; managed by `useTheme`).
+Dark is the approved **Obsidian** direction: near-black warm-neutral surfaces,
+cream text, brightened gold, lightened graha colors. Same geometry, radii,
+blur, and fonts — dark is a token swap, never a layout change.
+
+Rules:
+
+- **Never hardcode a white/ivory surface.** Use the neutral-surface tokens —
+  they swap automatically in dark:
+
+| Token | Light | Dark | Use |
+|-------|-------|------|-----|
+| `--surface` | `rgba(255,255,255,.5)` | `rgba(255,255,255,.06)` | control / panel fills |
+| `--surface-on` | `#fff` | `rgba(255,255,255,.10)` | active seg button, hover fills |
+| `--hl` | `rgba(255,255,255,.7)` | `rgba(255,255,255,.06)` | inset top highlight |
+| `--dot` | `#fffdf8` | `#e8e2d6` | slider transition dot fill |
+
+- **Core tokens are re-valued in dark** (see the `:root[data-theme="dark"]`
+  block in [tokens.css](tokens.css)): `--bg1/--bg2` near-black, `--glass`
+  smoked, `--ink*` cream, `--gold #dcae4d`, `--saffron #f0a13c`,
+  `--gold-soft` becomes a translucent gold wash, shadows go black-based.
+- **Per-graha colors lighten in dark** for legibility on near-black — the
+  `--gr-*` vars swap automatically; keep referencing the vars and both themes
+  work for free.
+- Exceptions that deliberately stay fixed: the ॐ tile's `color:#fff` (white on
+  the saffron→gold gradient reads in both themes), and the light `body`
+  gradient's `#fff`/`#f7ead0` highlights (dark has its own
+  `:root[data-theme="dark"] body` override).
+- When adding any new color: define it as a token with a value in **both**
+  themes, and eyeball it against both backgrounds before shipping.
+
 ## Common Mistakes
 
 - ❌ Pure white `#fff` panels → use warm `--glass` (ivory), not cold white.
@@ -119,3 +187,7 @@ border-radius: 30px;   /* cards. controls 13–16px, chips 20px pill */
 - ❌ Monochrome grahas → every graha keeps its distinct color in chart + slider.
 - ❌ Sharp corners → everything is generously rounded.
 - ❌ Mandala or glow stealing focus from chart/planets.
+- ❌ Hardcoding `#fff` / `rgba(255,255,255,…)` surfaces → use `--surface` / `--surface-on` / `--hl` so dark mode works.
+- ❌ Adding a color that only works on ivory → every new token needs a dark value too.
+- ❌ Hardcoding `#fff` / `rgba(255,255,255,…)` surfaces → use `--surface` / `--surface-on` / `--hl` so dark mode works.
+- ❌ Adding a color that only works on ivory → every new token needs a dark value too.
