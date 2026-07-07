@@ -16,9 +16,10 @@ body{
   position:relative; border-radius:var(--r-card); padding:30px 34px 34px;
   background:var(--glass); border:1px solid var(--glass-brd);
   backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
-  box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,.7);
+  box-shadow:var(--shadow), inset 0 1px 0 var(--hl);
 }
 header{display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end;}
 .brand{display:flex;align-items:center;gap:13px;}
 .brand .om{
   width:42px;height:42px;border-radius:13px;display:grid;place-items:center;
@@ -28,13 +29,13 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;}
 }
 .brand h1{font-family:var(--font-display);font-size:25px;font-weight:700;line-height:1;}
 .brand p{font-size:11.5px;color:var(--ink-soft);margin-top:3px;letter-spacing:.02em;}
-.seg{display:flex;padding:3px;gap:2px;background:rgba(255,255,255,.5);
+.seg{display:flex;padding:3px;gap:2px;background:var(--surface);
   border:1px solid var(--line);border-radius:12px;font-size:12px;}
 .seg button{border:0;background:transparent;padding:6px 12px;border-radius:9px;
   cursor:pointer;color:var(--ink-soft);font-weight:500;}
-.seg button.on{background:#fff;color:var(--gold);box-shadow:0 2px 8px -3px rgba(150,110,40,.3);}
+.seg button.on{background:var(--surface-on);color:var(--gold);box-shadow:0 2px 8px -3px rgba(150,110,40,.3);}
 .howto{margin-top:16px;border:1px solid var(--line);border-radius:var(--r-control);
-  background:rgba(255,255,255,.5);padding:0 16px;}
+  background:var(--surface);padding:0 16px;}
 .howto summary{cursor:pointer;list-style:none;padding:12px 0;font-size:11px;
   text-transform:uppercase;letter-spacing:.1em;color:var(--ink-soft);font-weight:600;}
 .howto summary::-webkit-details-marker{display:none;}
@@ -54,17 +55,17 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;}
 .field label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.1em;
   color:var(--ink-soft);margin-bottom:7px;font-weight:600;}
 select{width:100%;appearance:none;padding:11px 14px;border-radius:var(--r-control);
-  border:1px solid var(--line);background:rgba(255,255,255,.65)
+  border:1px solid var(--line);background:var(--surface)
   url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238a7558' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center;
   font-family:inherit;font-size:14px;color:var(--ink);cursor:pointer;}
 .chips{display:flex;flex-wrap:wrap;gap:7px;}
 .chip{font-size:12px;padding:6px 11px;border-radius:var(--r-pill);border:1px solid var(--line);
-  background:rgba(255,255,255,.5);color:var(--ink-soft);cursor:pointer;font-weight:500;}
+  background:var(--surface);color:var(--ink-soft);cursor:pointer;font-weight:500;}
 .chip.on{background:var(--gold-soft);border-color:transparent;color:var(--gold);}
 .chip.off{opacity:.5;text-decoration:line-through;}
-.readout{padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.55);border:1px solid var(--line);}
+.readout{padding:14px 16px;border-radius:16px;background:var(--surface);border:1px solid var(--line);}
 .degrees{list-style:none;margin:0;padding:12px 16px;border-radius:16px;
-  background:rgba(255,255,255,.55);border:1px solid var(--line);
+  background:var(--surface);border:1px solid var(--line);
   display:grid;grid-template-columns:1fr 1fr;gap:6px 20px;}
 .degrees li{font-size:12.5px;min-width:0;}
 .degrees .row{display:flex;align-items:baseline;gap:6px;min-width:0;}
@@ -81,23 +82,23 @@ select{width:100%;appearance:none;padding:11px 14px;border-radius:var(--r-contro
 .timebar{margin-top:24px;}
 .timehead{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
 .timehead .ttl{font-size:13px;font-weight:600;color:var(--ink-soft);}
-.today-btn{border:1px solid var(--line);background:rgba(255,255,255,.6);
+.today-btn{border:1px solid var(--line);background:var(--surface);
   color:var(--gold);font-weight:600;font-size:12px;padding:6px 14px;
   border-radius:var(--r-pill);cursor:pointer;
   box-shadow:0 2px 8px -4px rgba(150,110,40,.3);}
-.today-btn:hover{background:#fff;}
-.range-seg{display:flex;gap:2px;padding:3px;background:rgba(255,255,255,.5);
+.today-btn:hover{background:var(--surface-on);}
+.range-seg{display:flex;gap:2px;padding:3px;background:var(--surface);
   border:1px solid var(--line);border-radius:11px;font-size:11px;}
 .range-seg button{border:0;background:transparent;padding:5px 10px;border-radius:8px;
   cursor:pointer;color:var(--ink-soft);font-weight:600;}
-.range-seg button.on{background:#fff;color:var(--gold);box-shadow:0 2px 6px -3px rgba(150,110,40,.3);}
+.range-seg button.on{background:var(--surface-on);color:var(--gold);box-shadow:0 2px 6px -3px rgba(150,110,40,.3);}
 .track{position:relative;height:64px;}
 .track input[type=range]{position:absolute;top:38px;left:0;width:100%;margin:0;
   accent-color:var(--gold);cursor:pointer;}
 /* Dots live in their own band above the rail so taps never land inside the
    range input's hit box (which spans its whole element on touch). */
 .tdot{width:11px;height:11px;border-radius:50%;transform:translate(-50%,-50%);top:16px;
-  background:#fffdf8;border:2px solid var(--gold);z-index:2;
+  background:var(--dot);border:2px solid var(--gold);z-index:2;
   box-shadow:0 2px 6px -2px rgba(150,110,40,.4);cursor:pointer;padding:0;
   touch-action:manipulation;
   transition:transform .12s ease, box-shadow .12s ease;}
@@ -124,3 +125,15 @@ select{width:100%;appearance:none;padding:11px 14px;border-radius:var(--r-contro
   font-size:10px;font-weight:700;color:var(--saffron);}
 .now:hover::before,.now:focus-visible::before{width:4px;box-shadow:0 0 9px var(--saffron);}
 .now:focus-visible{outline:none;}
+
+/* dark theme: darken the page canvas behind the card */
+:root[data-theme="dark"] body{
+  background:
+    radial-gradient(1000px 600px at 80% -5%, #232323 0%, transparent 55%),
+    radial-gradient(700px 500px at 10% 100%, #1c1c1c, transparent 60%),
+    linear-gradient(160deg,var(--bg1),var(--bg2));
+}
+/* dark theme: lighten the select dropdown caret so it stays visible */
+:root[data-theme="dark"] select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23b3a892' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+}

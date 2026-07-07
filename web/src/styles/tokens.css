@@ -45,4 +45,29 @@
   --gr-sa:#3f5f86;   /* Saturn  — deep indigo-blue */
   --gr-ra:#6a5a3f;   /* Rahu    — umber */
   --gr-ke:#8a6a4a;   /* Ketu    — tan */
+
+  /* neutral surfaces (theme-swappable whites) */
+  --surface:rgba(255,255,255,.5);   /* control / panel fills */
+  --surface-on:#fff;                /* active seg button, hover */
+  --hl:rgba(255,255,255,.7);        /* inset top highlight */
+  --dot:#fffdf8;                    /* slider transition dot fill */
+}
+
+:root[data-theme="dark"]{
+  /* surfaces */
+  --bg1:#101010; --bg2:#181818;
+  --glass:rgba(30,30,30,.62); --glass-brd:rgba(212,175,110,.26);
+  /* text */
+  --ink:#efe9df; --ink-soft:#b3a892; --faint:#83796a;
+  /* accents */
+  --gold:#dcae4d; --gold-soft:rgba(220,174,77,.14); --saffron:#f0a13c;
+  /* structure */
+  --line:rgba(220,174,77,.22);
+  --shadow:0 16px 46px -16px rgba(0,0,0,.6);
+  /* neutral surfaces */
+  --surface:rgba(255,255,255,.06); --surface-on:rgba(255,255,255,.10);
+  --hl:rgba(255,255,255,.06); --dot:#e8e2d6;
+  /* per-graha — lightened for legibility on near-black */
+  --gr-su:#f0932e; --gr-mo:#9aa8ad; --gr-ma:#e46b57; --gr-me:#45b088;
+  --gr-ju:#e0c05a; --gr-ve:#c48fcc; --gr-sa:#7c9ed0; --gr-ra:#b39a72; --gr-ke:#c2a17f;
 }
