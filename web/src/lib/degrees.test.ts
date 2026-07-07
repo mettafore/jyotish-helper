@@ -102,6 +102,10 @@ describe("fmtDeg", () => {
     expect(fmtDeg(29.96)).toBe("29.9"); // real near-boundary daily sample
     expect(fmtDeg(30.0)).toBe("29.9");  // degreeInSign can already yield 30.0
   });
+  it("handles near-boundary rounding just below the clamp", () => {
+    expect(fmtDeg(29.94)).toBe("29.9");
+    expect(fmtDeg(29.85)).toBe("29.9"); // rounds up but stays in-sign
+  });
 });
 
 describe("effectiveSignDegree", () => {
@@ -147,5 +151,52 @@ describe("effectiveSignDegree", () => {
     const viewing = new Date("2020-01-02T10:00:00Z");
     expect(effectiveSignDegree(mercuryData, undefined, "mercury", viewing))
       .toEqual(degreeInSign(90.11));
+  });
+
+  it("falls back to the daily snapshot for an empty transitions array", () => {
+    const viewing = new Date("2020-01-02T10:00:00Z");
+    expect(effectiveSignDegree(mercuryData, [], "mercury", viewing))
+      .toEqual(degreeInSign(90.11));
+  });
+
+  it("falls back to the daily snapshot when viewing before the first transition", () => {
+    const viewing = new Date("2019-12-01T00:00:00Z"); // before any listed entry
+    // dayIndex clamps to day 0 (91.0° = 1° Cancer)
+    expect(effectiveSignDegree(mercuryData, transitions, "mercury", viewing))
+      .toEqual(degreeInSign(91.0));
+  });
+
+  it("keeps the daily snapshot when the transition is exactly at the snapshot time", () => {
+    const atSnapshot: Transition[] = [
+      { sign: 2, enters: "2020-01-02T00:00:00Z" }, // == day-1 sample time
+    ];
+    const viewing = new Date("2020-01-02T10:00:00Z");
+    // The snapshot already reflects a crossing at/before its own timestamp.
+    expect(effectiveSignDegree(mercuryData, atSnapshot, "mercury", viewing))
+      .toEqual(degreeInSign(90.11));
+  });
+
+  it("applies a transition occurring exactly at the viewed instant", () => {
+    const viewing = new Date("2020-01-02T05:16:24Z"); // == the crossing time
+    expect(effectiveSignDegree(mercuryData, transitions, "mercury", viewing))
+      .toEqual({ sign: 2, deg: 29.99 });
+  });
+
+  it("uses the latest crossing when multiple happen between snapshot and viewed time", () => {
+    const recrossings: Transition[] = [
+      { sign: 3, enters: "2019-12-15T00:00:00Z" }, // Cancer, direct
+      { sign: 2, enters: "2020-01-02T03:00:00Z" }, // retro back into Gemini
+      { sign: 3, enters: "2020-01-02T08:00:00Z" }, // direct into Cancer again
+    ];
+    const viewing = new Date("2020-01-02T10:00:00Z");
+    expect(effectiveSignDegree(mercuryData, recrossings, "mercury", viewing))
+      .toEqual({ sign: 3, deg: 0 });
+  });
+
+  it("treats a lone first transition (no prior entry) as a direct entry at 0°", () => {
+    const lone: Transition[] = [{ sign: 2, enters: "2020-01-02T05:00:00Z" }];
+    const viewing = new Date("2020-01-02T10:00:00Z");
+    expect(effectiveSignDegree(mercuryData, lone, "mercury", viewing))
+      .toEqual({ sign: 2, deg: 0 });
   });
 });

@@ -69,4 +69,50 @@ describe("nextTransitionToday", () => {
     ];
     expect(nextTransitionToday(list, now)).toBeUndefined();
   });
+
+  it("returns undefined for an empty list", () => {
+    expect(nextTransitionToday([], new Date(2024, 5, 15, 12, 0))).toBeUndefined();
+  });
+
+  it("treats a transition exactly at t as already happened, not upcoming", () => {
+    const now = new Date(2024, 5, 15, 12, 0);
+    const later = new Date(2024, 5, 15, 18, 0);
+    const list: Transition[] = [
+      { sign: 1, enters: now.toISOString() },
+      { sign: 2, enters: later.toISOString() },
+    ];
+    // An entry at exactly t is current state (signAt territory); the preview
+    // must skip it and surface the next strictly-future one.
+    expect(nextTransitionToday(list, now)).toEqual({ sign: 2, enters: later.toISOString() });
+  });
+
+  it("ignores a transition earlier the same day that has already passed", () => {
+    const now = new Date(2024, 5, 15, 12, 0);
+    const list: Transition[] = [
+      { sign: 1, enters: new Date(2024, 5, 15, 3, 0).toISOString() }, // past, today
+      { sign: 2, enters: new Date(2024, 5, 16, 1, 0).toISOString() }, // tomorrow
+    ];
+    expect(nextTransitionToday(list, now)).toBeUndefined();
+  });
+
+  it("picks the next upcoming transition of the day, not the last", () => {
+    const now = new Date(2024, 5, 15, 5, 0);
+    const first = new Date(2024, 5, 15, 10, 0);
+    const second = new Date(2024, 5, 15, 20, 0);
+    const list: Transition[] = [
+      { sign: 1, enters: first.toISOString() },
+      { sign: 2, enters: second.toISOString() },
+    ];
+    expect(nextTransitionToday(list, now)).toEqual({ sign: 1, enters: first.toISOString() });
+  });
+
+  it("includes 23:59:59 local but excludes 00:00:00 the next day", () => {
+    const now = new Date(2024, 5, 15, 12, 0);
+    const endOfDay = new Date(2024, 5, 15, 23, 59, 59);
+    expect(nextTransitionToday([{ sign: 1, enters: endOfDay.toISOString() }], now))
+      .toEqual({ sign: 1, enters: endOfDay.toISOString() });
+    const midnight = new Date(2024, 5, 16, 0, 0, 0);
+    expect(nextTransitionToday([{ sign: 1, enters: midnight.toISOString() }], now))
+      .toBeUndefined();
+  });
 });

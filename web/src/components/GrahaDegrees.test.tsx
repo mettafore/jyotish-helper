@@ -99,4 +99,32 @@ describe("GrahaDegrees", () => {
     expect(primaryRow.textContent).not.toContain("Virgo");
     expect(marsRow.querySelector(".n")!.textContent).toContain("Virgo");
   });
+
+  it("renders no preview line when the graha has transitions but none today", () => {
+    const tomorrow = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1, 1, 0);
+    const { getByText } = render(
+      <GrahaDegrees
+        data={data}
+        transitions={{ mars: [{ sign: 5, enters: tomorrow.toISOString() }] }}
+        date={date} script="western"
+      />,
+    );
+    const marsRow = getByText("20.5°").closest("li")!;
+    expect(marsRow.querySelector(".n")).toBeNull();
+  });
+
+  it("uses Devanagari sign names in the preview line when script=devanagari", () => {
+    const laterToday = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 45);
+    const { getByText, queryByText } = render(
+      <GrahaDegrees
+        data={data}
+        transitions={{ mars: [{ sign: 5, enters: laterToday.toISOString() }] }}
+        date={date} script="devanagari"
+      />,
+    );
+    const marsRow = getByText("20.5°").closest("li")!;
+    const preview = marsRow.querySelector(".n")!;
+    expect(preview.textContent).toContain("कन्या"); // Virgo in Devanagari
+    expect(queryByText(/Virgo/)).toBeNull();
+  });
 });
