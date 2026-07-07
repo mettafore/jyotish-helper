@@ -13,13 +13,17 @@ occupies in a North Indian diamond chart, scrubbable over 2015–2040, using the
 - Time slider with clickable, dated transition markers; jump to "Now" or any range
   (±3M / ±6M / ±1Y / ±5Y / ±10Y).
 - Western or Devanagari script for the whole chart.
+- Daily graha degrees panel: exact degree within sign, ⬆ exaltation / ⬇ debilitation,
+  🌀 retrograde, 🔥 combust (within 15° of the Sun, 10° for Mercury).
+- Same-day upcoming transition preview — shows the local time and sign a graha
+  moves into if it changes sign later that day.
 
 ## Architecture (no backend)
 
 - **`generator/`** — offline Python ([uv](https://docs.astral.sh/uv/)) +
   [pyswisseph](https://github.com/astrorigin/pyswisseph) (Moshier mode) computes every
-  graha's sign-transition timestamps once and writes a static
-  `web/public/data/transitions.json`.
+  graha's sign-transition timestamps and daily sidereal longitudes once, writing static
+  `web/public/data/transitions.json` and `degrees.json`.
 - **`web/`** — static Vite + React + TypeScript app. Loads the JSON and does a
   binary-search lookup at runtime — zero astronomy in the browser. Deployed on Vercel.
 
