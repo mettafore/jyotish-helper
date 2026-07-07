@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { NorthIndianChart } from "./components/NorthIndianChart";
+import { ThemeToggle } from "./components/ThemeToggle";
+import { useTheme } from "./lib/useTheme";
 import { LagnaSelect } from "./components/LagnaSelect";
 import { PlanetFilter } from "./components/PlanetFilter";
 import { TimeSlider } from "./components/TimeSlider";
@@ -25,6 +27,7 @@ export default function App() {
   const [value, setValue] = useState<Date>(new Date());
   const [house1Sign, setHouse1Sign] = useState(0);
   const [script, setScript] = useState<"western" | "devanagari">("western");
+  const { pref: themePref, setPref: setThemePref } = useTheme();
   const [rangeMonths, setRangeMonths] = useState(3);
   const [enabled, setEnabled] = useState<Record<string, boolean>>(
     Object.fromEntries(GRAHAS.map((g) => [g, g !== "moon"])), // Moon off by default
@@ -82,11 +85,14 @@ export default function App() {
               <p>GOCHAR · TRANSIT CHART · LAHIRI</p>
             </div>
           </div>
-          <div className="seg">
-            <button className={script === "western" ? "on" : ""}
-                    onClick={() => setScript("western")}>Western</button>
-            <button className={script === "devanagari" ? "on" : ""}
-                    onClick={() => setScript("devanagari")}>देवनागरी</button>
+          <div className="controls">
+            <ThemeToggle pref={themePref} onChange={setThemePref} />
+            <div className="seg">
+              <button className={script === "western" ? "on" : ""}
+                      onClick={() => setScript("western")}>Western</button>
+              <button className={script === "devanagari" ? "on" : ""}
+                      onClick={() => setScript("devanagari")}>देवनागरी</button>
+            </div>
           </div>
         </header>
 

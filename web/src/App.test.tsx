@@ -22,6 +22,11 @@ const fake = {
 
 beforeEach(() => {
   vi.stubGlobal("fetch", vi.fn(async () => ({ ok: true, json: async () => fake })));
+  vi.stubGlobal("matchMedia", () => ({
+    matches: false, media: "", addEventListener() {}, removeEventListener() {},
+  }));
+  document.documentElement.removeAttribute("data-theme");
+  localStorage.clear();
 });
 
 describe("App", () => {
@@ -57,5 +62,14 @@ describe("App", () => {
     // Click Today -> back to now.
     fireEvent.click(screen.getByText("Today"));
     expect(screen.getByText((t) => t.includes(todayStr))).toBeInTheDocument();
+  });
+});
+
+describe("theme toggle", () => {
+  it("locks dark when Dark is clicked", async () => {
+    const { findByText } = render(<App />);
+    fireEvent.click(await findByText("Dark"));
+    expect(document.documentElement.getAttribute("data-theme")).toBe("dark");
+    expect(localStorage.getItem("theme")).toBe("dark");
   });
 });
