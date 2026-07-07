@@ -107,13 +107,14 @@ Releases. Use `gh`, never plain `git tag` alone:
 gh release create v1.0.4 --title "v1.0.4" --notes "..." --latest
 ```
 
-## Keep README.md current
+## Keep documentation current
 
-**Update `README.md` whenever a branch merges to `main` or a release is cut.**
-It's user-facing (features list, live URL, Develop commands) and drifts fast —
-new features, changed commands, or data-model shifts (e.g. the `degrees.json`
-addition) must land in the same turn as the merge/release, not later. Use the
-**`update-readme`** skill to do this.
+**Update `README.md` and `docs/architecture.md` whenever a branch merges to
+`main` or a release is cut.** README is user-facing (features list, live URL,
+Develop commands); architecture.md holds the mermaid diagrams. Both drift
+fast — new features, changed commands, or data-model shifts (e.g. the
+`degrees.json` addition) must land in the same turn as the merge/release, not
+later. Use the **`update-documentation`** skill to do this.
 
 ## Test-driven development
 
@@ -160,8 +161,9 @@ yielding. Keep commits small and reversible; never push unless asked.
   React. Install: `npx skills add https://github.com/vercel-labs/agent-skills --skill vercel-react-best-practices`
 - **`/code-review`** on diffs before commit; **`/security-review`** before any
   deploy. (Both ship with the harness — trusted, no external supply chain.)
-- **`update-readme`** (project skill) — run after merging a branch to `main` or
-  cutting a release, to keep `README.md` in sync with what actually shipped.
+- **`update-documentation`** (project skill) — run after merging a branch to
+  `main` or cutting a release, to keep `README.md` and `docs/architecture.md`
+  in sync with what actually shipped.
 
 ## Licensing note
 
