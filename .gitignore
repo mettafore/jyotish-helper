@@ -43,3 +43,4 @@ course/*
 # see data/ in AGENTS.md). Only ignore scratch/temp outputs here:
 generator/scratch/
 *.tmp.json
+.superpowers/
