@@ -2,6 +2,8 @@
 // 00:00 UTC; everything here is date-granular by design — never surface a
 // time of day next to a degree-derived value.
 
+import type { Transition } from "./transits";
+
 export interface DegreesData {
   ayanamsa: string;
   start: string;
@@ -17,6 +19,11 @@ function dayIndex(data: DegreesData, planet: string, d: Date): number {
     (d.getTime() - new Date(data.start).getTime()) / (data.stepDays * DAY_MS),
   );
   return Math.min(Math.max(i, 0), arr.length - 1);
+}
+
+function sampleTimeAt(data: DegreesData, planet: string, d: Date): number {
+  const i = dayIndex(data, planet, d);
+  return new Date(data.start).getTime() + i * data.stepDays * DAY_MS;
 }
 
 export function longitudeAt(data: DegreesData, planet: string, d: Date): number {
@@ -53,4 +60,47 @@ export function isCombust(data: DegreesData, planet: string, d: Date): boolean {
 export function degreeInSign(lon: number): { sign: number; deg: number } {
   const sign = Math.floor((lon % 360) / 30);
   return { sign, deg: Math.round((lon - sign * 30) * 100) / 100 };
+}
+
+// Degrees within a sign live in [0, 30). Round to one decimal for display, but
+// never let rounding push a near-boundary value up to "30.0°" (an impossible
+// coordinate — that's 0° of the next sign). Caps at 29.9°.
+export function fmtDeg(deg: number): string {
+  return Math.min(Math.round(deg * 10) / 10, 29.9).toFixed(1);
+}
+
+// The daily snapshot goes stale the moment a real sign transition happens
+// after it. If transitions.json shows a later crossing than the snapshot's
+// own timestamp, trust the crossing for the sign; the exact degree isn't
+// stored for transitions, so use the boundary value (0° direct entry, ~30°
+// retrograde entry, inferred from the prior transition's sign).
+export function effectiveSignDegree(
+  data: DegreesData,
+  transitions: Transition[] | undefined,
+  planet: string,
+  d: Date,
+): { sign: number; deg: number } {
+  const daily = degreeInSign(longitudeAt(data, planet, d));
+  if (!transitions || transitions.length === 0) return daily;
+
+  const ms = d.getTime();
+  let lo = 0, hi = transitions.length - 1, ans = -1;
+  while (lo <= hi) {
+    const mid = (lo + hi) >> 1;
+    if (new Date(transitions[mid].enters).getTime() <= ms) {
+      ans = mid;
+      lo = mid + 1;
+    } else {
+      hi = mid - 1;
+    }
+  }
+  if (ans < 0) return daily;
+
+  const entry = transitions[ans];
+  const entryMs = new Date(entry.enters).getTime();
+  if (entryMs <= sampleTimeAt(data, planet, d)) return daily;
+
+  const prevSign = ans > 0 ? transitions[ans - 1].sign : undefined;
+  const retro = prevSign !== undefined && (entry.sign - prevSign + 12) % 12 === 11;
+  return { sign: entry.sign, deg: retro ? 29.99 : 0 };
 }

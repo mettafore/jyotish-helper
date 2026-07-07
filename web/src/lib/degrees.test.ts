@@ -1,7 +1,9 @@
 import { describe, it, expect } from "vitest";
 import {
-  longitudeAt, isRetrograde, isCombust, degreeInSign, type DegreesData,
+  longitudeAt, isRetrograde, isCombust, degreeInSign, effectiveSignDegree, fmtDeg,
+  type DegreesData,
 } from "./degrees";
+import type { Transition } from "./transits";
 
 const data: DegreesData = {
   ayanamsa: "lahiri",
@@ -87,5 +89,63 @@ describe("degreeInSign", () => {
     expect(degreeInSign(100.0)).toEqual({ sign: 3, deg: 10.0 }); // 10° Cancer
     expect(degreeInSign(0.5)).toEqual({ sign: 0, deg: 0.5 });
     expect(degreeInSign(359.5)).toEqual({ sign: 11, deg: 29.5 });
+  });
+});
+
+describe("fmtDeg", () => {
+  it("rounds to one decimal for normal values", () => {
+    expect(fmtDeg(20.68)).toBe("20.7");
+    expect(fmtDeg(0)).toBe("0.0");
+  });
+  it("never rounds up out of the sign — degrees are [0,30)", () => {
+    expect(fmtDeg(29.99)).toBe("29.9"); // fabricated retrograde-entry value
+    expect(fmtDeg(29.96)).toBe("29.9"); // real near-boundary daily sample
+    expect(fmtDeg(30.0)).toBe("29.9");  // degreeInSign can already yield 30.0
+  });
+});
+
+describe("effectiveSignDegree", () => {
+  // Repro: Mercury retrograde-recrosses into Gemini at 05:16 UTC on day 1,
+  // hours after the day-1 daily snapshot (taken at 00:00 UTC, still 90.11°
+  // Cancer). Anyone viewing after the crossing should see Gemini, not the
+  // stale Cancer snapshot.
+  const mercuryData: DegreesData = {
+    ayanamsa: "lahiri",
+    start: "2020-01-01T00:00:00Z",
+    stepDays: 1,
+    planets: { mercury: [91.0, 90.11] },
+  };
+  const transitions: Transition[] = [
+    { sign: 3, enters: "2019-12-15T00:00:00Z" }, // entered Cancer (direct), weeks earlier
+    { sign: 2, enters: "2020-01-02T05:16:24Z" }, // retrograde re-entry into Gemini
+  ];
+
+  it("prefers a transition that happened after the daily snapshot", () => {
+    const viewing = new Date("2020-01-02T10:00:00Z"); // after the 05:16 crossing
+    expect(effectiveSignDegree(mercuryData, transitions, "mercury", viewing))
+      .toEqual({ sign: 2, deg: 29.99 }); // raw retrograde-entry value; fmtDeg clamps
+                                         // the *display* so it never rounds to "30.0°"
+  });
+
+  it("falls back to the daily snapshot when no transition beats it", () => {
+    const viewing = new Date("2020-01-02T02:00:00Z"); // before the 05:16 crossing
+    expect(effectiveSignDegree(mercuryData, transitions, "mercury", viewing))
+      .toEqual(degreeInSign(90.11)); // sign 3 (Cancer), deg 0.11
+  });
+
+  it("uses degree 0 for a direct-motion transition", () => {
+    const directTransitions: Transition[] = [
+      { sign: 2, enters: "2019-12-15T00:00:00Z" },
+      { sign: 3, enters: "2020-01-02T05:16:24Z" }, // direct entry into Cancer
+    ];
+    const viewing = new Date("2020-01-02T10:00:00Z");
+    expect(effectiveSignDegree(mercuryData, directTransitions, "mercury", viewing))
+      .toEqual({ sign: 3, deg: 0 });
+  });
+
+  it("falls back to the daily snapshot when transitions are absent", () => {
+    const viewing = new Date("2020-01-02T10:00:00Z");
+    expect(effectiveSignDegree(mercuryData, undefined, "mercury", viewing))
+      .toEqual(degreeInSign(90.11));
   });
 });

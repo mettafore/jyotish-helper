@@ -21,6 +21,26 @@ export function signAt(list: Transition[], t: Date): number {
   return list[ans].sign;
 }
 
+// The first entry after t, only if it falls on the viewer's local calendar
+// day — used to preview "transitions later today", never as a substitute for
+// signAt's causal current-state answer.
+export function nextTransitionToday(list: Transition[], t: Date): Transition | undefined {
+  const ms = t.getTime();
+  let lo = 0, hi = list.length;
+  while (lo < hi) {
+    const mid = (lo + hi) >> 1;
+    if (new Date(list[mid].enters).getTime() > ms) hi = mid;
+    else lo = mid + 1;
+  }
+  if (lo >= list.length) return undefined;
+  const entry = list[lo];
+  const entryDate = new Date(entry.enters);
+  const sameLocalDay = t.getFullYear() === entryDate.getFullYear()
+    && t.getMonth() === entryDate.getMonth()
+    && t.getDate() === entryDate.getDate();
+  return sameLocalDay ? entry : undefined;
+}
+
 export function transitionsInRange(
   data: TransitData,
   planets: string[],

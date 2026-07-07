@@ -1,5 +1,7 @@
 import { describe, it, expect } from "vitest";
-import { signAt, transitionsInRange, type TransitData } from "./transits";
+import {
+  signAt, transitionsInRange, nextTransitionToday, type TransitData, type Transition,
+} from "./transits";
 
 const data: TransitData = {
   ayanamsa: "lahiri",
@@ -35,5 +37,36 @@ describe("transitionsInRange", () => {
     );
     expect(out.map((e) => e.sign)).toEqual([9, 10]); // seed (8) skipped
     expect(out.every((e) => e.planet === "mars")).toBe(true);
+  });
+});
+
+describe("nextTransitionToday", () => {
+  // Local-time construction throughout, so this is stable under any test-runner TZ.
+  it("returns the upcoming transition when it falls on the same local day", () => {
+    const now = new Date(2024, 5, 15, 5, 0); // June 15, 5:00am local
+    const laterToday = new Date(2024, 5, 15, 22, 30); // June 15, 10:30pm local
+    const list: Transition[] = [
+      { sign: 1, enters: new Date(2024, 5, 1, 0, 0).toISOString() },
+      { sign: 2, enters: laterToday.toISOString() },
+    ];
+    expect(nextTransitionToday(list, now)).toEqual({ sign: 2, enters: laterToday.toISOString() });
+  });
+
+  it("returns undefined when the next transition is tomorrow or later", () => {
+    const now = new Date(2024, 5, 15, 22, 0);
+    const tomorrow = new Date(2024, 5, 16, 1, 0);
+    const list: Transition[] = [
+      { sign: 1, enters: new Date(2024, 5, 1, 0, 0).toISOString() },
+      { sign: 2, enters: tomorrow.toISOString() },
+    ];
+    expect(nextTransitionToday(list, now)).toBeUndefined();
+  });
+
+  it("returns undefined when there is no future transition at all", () => {
+    const now = new Date(2024, 5, 15, 12, 0);
+    const list: Transition[] = [
+      { sign: 1, enters: new Date(2024, 5, 1, 0, 0).toISOString() },
+    ];
+    expect(nextTransitionToday(list, now)).toBeUndefined();
   });
 });

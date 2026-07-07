@@ -5,6 +5,10 @@ export function fmtDate(d: Date): string {
   return `${p2(d.getDate())}-${p2(d.getMonth() + 1)}-${String(d.getFullYear()).slice(-2)}`;
 }
 
+export function fmtTime(d: Date): string {
+  return `${p2(d.getHours())}:${p2(d.getMinutes())}`;
+}
+
 export function fmtDateTime(d: Date): string {
-  return `${fmtDate(d)} ${p2(d.getHours())}:${p2(d.getMinutes())}`;
+  return `${fmtDate(d)} ${fmtTime(d)}`;
 }

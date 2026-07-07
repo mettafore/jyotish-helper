@@ -125,7 +125,8 @@ export default function App() {
               <div className="field">
                 {/* Daily 00:00 UTC samples — date-granular, so no time shown. */}
                 <label>Graha degrees · daily</label>
-                <GrahaDegrees data={degrees} date={value} script={script} />
+                <GrahaDegrees data={degrees} transitions={data.planets} date={value}
+                              script={script} />
               </div>
             )}
           </div>
