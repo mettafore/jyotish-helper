@@ -5,7 +5,9 @@ import { PlanetFilter } from "./components/PlanetFilter";
 import { TimeSlider } from "./components/TimeSlider";
 import { GrahaDegrees } from "./components/GrahaDegrees";
 import { signAt, transitionsInRange, type TransitData } from "./lib/transits";
-import { isRetrograde, isCombust, type DegreesData } from "./lib/degrees";
+import {
+  isRetrograde, isCombust, COMBUST_ORB_DEFAULT, COMBUST_ORB_MERCURY, type DegreesData,
+} from "./lib/degrees";
 import { fmtDateTime } from "./lib/format";
 import { GRAHAS } from "./lib/signs";
 
@@ -99,6 +101,11 @@ export default function App() {
               upcoming sign transitions — click one to jump to it. <b>Now</b> marks today.</li>
             <li>Use <b>Transition planets</b> to choose which grahas show dots, and the
               <b>±range</b> buttons to widen the window (Moon is off by default).</li>
+            <li><b>⬆</b> exalted · <b>⬇</b> debilitated · <b>🌀</b> retrograde ·
+              <b>🔥</b> combust — within {COMBUST_ORB_DEFAULT}° of the Sun
+              (Mercury {COMBUST_ORB_MERCURY}°), based on daily positions.</li>
+            <li>A <b>→ time · sign</b> line under a graha's degree means it changes
+              sign later that same day — the time and sign it moves into.</li>
           </ul>
         </details>
 
