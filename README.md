@@ -17,6 +17,8 @@ occupies in a North Indian diamond chart, scrubbable over 2015–2040, using the
   🌀 retrograde, 🔥 combust (within 15° of the Sun, 10° for Mercury).
 - Same-day upcoming transition preview — shows the local time and sign a graha
   moves into if it changes sign later that day.
+- Light / Dark / Auto theme toggle — Auto follows the OS setting live; dark
+  mode uses an "Obsidian" palette, no flash of the wrong theme on load.
 
 ## Architecture (no backend)
 
