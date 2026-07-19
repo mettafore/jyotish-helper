@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
-import { describe, it, expect } from "vitest";
-import { render } from "@testing-library/react";
+import { describe, it, expect, beforeEach } from "vitest";
+import { fireEvent, render } from "@testing-library/react";
 import { GrahaDegrees } from "./GrahaDegrees";
 import type { DegreesData } from "../lib/degrees";
 
@@ -126,5 +126,70 @@ describe("GrahaDegrees", () => {
     const preview = marsRow.querySelector(".n")!;
     expect(preview.textContent).toContain("कन्या"); // Virgo in Devanagari
     expect(queryByText(/Virgo/)).toBeNull();
+  });
+});
+
+describe("GrahaDegrees rāśi/nakshatra view toggle", () => {
+  beforeEach(() => localStorage.clear());
+
+  it("defaults to the rāśi (degree) view with a two-way toggle visible", () => {
+    const { getByRole, getByText } = render(
+      <GrahaDegrees data={data} transitions={{}} date={date} script="western" />,
+    );
+    expect(getByText("20.5°")).toBeInTheDocument();
+    expect(getByRole("button", { name: /nakshatra/i })).toBeInTheDocument();
+  });
+
+  it("switches rows to nakshatra · pada and back", () => {
+    const { getByRole, getByText, queryByText } = render(
+      <GrahaDegrees data={data} transitions={{}} date={date} script="western" />,
+    );
+    fireEvent.click(getByRole("button", { name: /nakshatra/i }));
+    expect(getByText("Bharani")).toBeInTheDocument();  // Mars 20.5°
+    expect(getByText("Pushya")).toBeInTheDocument();   // Sun 100°
+    expect(getByText("Ashlesha")).toBeInTheDocument(); // Venus 110°
+    expect(queryByText("20.5°")).toBeNull();
+    fireEvent.click(getByRole("button", { name: /rāśi/i }));
+    expect(getByText("20.5°")).toBeInTheDocument();
+  });
+
+  it("keeps 🌀/🔥 badges in the nakshatra view", () => {
+    const { getByRole, getByText } = render(
+      <GrahaDegrees data={data} transitions={{}} date={date} script="western" />,
+    );
+    fireEvent.click(getByRole("button", { name: /nakshatra/i }));
+    expect(getByText("Bharani").closest("li")!.textContent).toContain("🌀");
+    expect(getByText("Ashlesha").closest("li")!.textContent).toContain("🔥");
+  });
+
+  it("uses Devanagari nakshatra names when script=devanagari", () => {
+    const { getByRole, getByText } = render(
+      <GrahaDegrees data={data} transitions={{}} date={date} script="devanagari" />,
+    );
+    fireEvent.click(getByRole("button", { name: /nakshatra/i }));
+    expect(getByText("भरणी")).toBeInTheDocument();
+  });
+
+  it("offers the hidden view as a row tooltip in both directions", () => {
+    const { getByRole, getByText } = render(
+      <GrahaDegrees data={data} transitions={{}} date={date} script="western" />,
+    );
+    const rasiRow = getByText("20.5°").closest(".row")!;
+    expect(rasiRow.getAttribute("title")).toMatch(/Bharani/);
+    fireEvent.click(getByRole("button", { name: /nakshatra/i }));
+    const nakRow = getByText("Bharani").closest(".row")!;
+    expect(nakRow.getAttribute("title")).toMatch(/20\.5°/);
+  });
+
+  it("persists the chosen view across mounts", () => {
+    const first = render(
+      <GrahaDegrees data={data} transitions={{}} date={date} script="western" />,
+    );
+    fireEvent.click(first.getByRole("button", { name: /nakshatra/i }));
+    first.unmount();
+    const second = render(
+      <GrahaDegrees data={data} transitions={{}} date={date} script="western" />,
+    );
+    expect(second.getByText("Bharani")).toBeInTheDocument();
   });
 });

@@ -107,6 +107,9 @@ export default function App() {
               upcoming sign transitions — click one to jump to it. <b>Now</b> marks today.</li>
             <li>Use <b>Transition planets</b> to choose which grahas show dots, and the
               <b>±range</b> buttons to widen the window (Moon is off by default).</li>
+            <li>The degrees panel's <b>Rāśi ° / Nakshatra</b> toggle switches each
+              graha's line between degree-in-sign and nakshatra · pada; hover a
+              line to peek at the other view.</li>
             <li><b>⬆</b> exalted · <b>⬇</b> debilitated · <b>🌀</b> retrograde ·
               <b>🔥</b> combust — within {COMBUST_ORB_DEFAULT}° of the Sun
               (Mercury {COMBUST_ORB_MERCURY}°), based on daily positions.</li>
@@ -136,8 +139,8 @@ export default function App() {
             </div>
             {degrees && (
               <div className="field">
-                {/* Daily 00:00 UTC samples — date-granular, so no time shown. */}
-                <label>Graha degrees · daily</label>
+                {/* Daily 00:00 UTC samples — date-granular, so no time shown.
+                    Label + Rāśi/Nakshatra view toggle render inside the panel. */}
                 <GrahaDegrees data={degrees} transitions={data.planets} date={value}
                               script={script} />
               </div>
