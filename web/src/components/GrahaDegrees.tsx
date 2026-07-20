@@ -44,15 +44,17 @@ export function GrahaDegrees(
         <label>Graha degrees · daily</label>
         <div className="seg seg-sm">
           <button type="button" className={view === "rasi" ? "on" : ""}
+                  aria-pressed={view === "rasi"}
                   onClick={() => pick("rasi")}>Rāśi °</button>
           <button type="button" className={view === "nakshatra" ? "on" : ""}
+                  aria-pressed={view === "nakshatra"}
                   onClick={() => pick("nakshatra")}>Nakshatra</button>
         </div>
       </div>
       <ul className="degrees">
         {GRAHAS.filter((g) => data.planets[g]).map((g) => {
-          const { sign, deg } = effectiveSignDegree(data, transitions[g], g, date);
-          const nak = nakshatraOf(sign * 30 + deg);
+          const { sign, deg, lon } = effectiveSignDegree(data, transitions[g], g, date);
+          const nak = nakshatraOf(lon);
           const next = nextTransitionToday(transitions[g] ?? [], date);
           const rasiText = `${fmtDeg(deg)}° ${signs[sign]}`;
           const nakText = `${naks[nak.index]} · ${nak.pada}`;

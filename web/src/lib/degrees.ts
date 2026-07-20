@@ -79,8 +79,15 @@ export function effectiveSignDegree(
   transitions: Transition[] | undefined,
   planet: string,
   d: Date,
-): { sign: number; deg: number } {
-  const daily = degreeInSign(longitudeAt(data, planet, d));
+): { sign: number; deg: number; lon: number } {
+  // `deg` is rounded for display; `lon` stays unrounded so finer-grained
+  // derivations (nakshatra/pada) can't be pushed across a boundary — or
+  // wrapped to 360° — by the rounding.
+  // Normalize without the ((x%360)+360)%360 dance: adding 360 to an already
+  // in-range value injects float noise (90.11 -> 90.11000000000001).
+  let rawLon = longitudeAt(data, planet, d) % 360;
+  if (rawLon < 0) rawLon += 360;
+  const daily = { ...degreeInSign(rawLon), lon: rawLon };
   if (!transitions || transitions.length === 0) return daily;
 
   const ms = d.getTime();
@@ -102,5 +109,6 @@ export function effectiveSignDegree(
 
   const prevSign = ans > 0 ? transitions[ans - 1].sign : undefined;
   const retro = prevSign !== undefined && (entry.sign - prevSign + 12) % 12 === 11;
-  return { sign: entry.sign, deg: retro ? 29.99 : 0 };
+  const deg = retro ? 29.99 : 0;
+  return { sign: entry.sign, deg, lon: entry.sign * 30 + deg };
 }

@@ -127,14 +127,14 @@ describe("effectiveSignDegree", () => {
   it("prefers a transition that happened after the daily snapshot", () => {
     const viewing = new Date("2020-01-02T10:00:00Z"); // after the 05:16 crossing
     expect(effectiveSignDegree(mercuryData, transitions, "mercury", viewing))
-      .toEqual({ sign: 2, deg: 29.99 }); // raw retrograde-entry value; fmtDeg clamps
+      .toEqual({ sign: 2, deg: 29.99, lon: 89.99 }); // raw retrograde-entry value; fmtDeg clamps
                                          // the *display* so it never rounds to "30.0°"
   });
 
   it("falls back to the daily snapshot when no transition beats it", () => {
     const viewing = new Date("2020-01-02T02:00:00Z"); // before the 05:16 crossing
     expect(effectiveSignDegree(mercuryData, transitions, "mercury", viewing))
-      .toEqual(degreeInSign(90.11)); // sign 3 (Cancer), deg 0.11
+      .toEqual({ ...degreeInSign(90.11), lon: 90.11 }); // sign 3 (Cancer), deg 0.11
   });
 
   it("uses degree 0 for a direct-motion transition", () => {
@@ -144,26 +144,26 @@ describe("effectiveSignDegree", () => {
     ];
     const viewing = new Date("2020-01-02T10:00:00Z");
     expect(effectiveSignDegree(mercuryData, directTransitions, "mercury", viewing))
-      .toEqual({ sign: 3, deg: 0 });
+      .toEqual({ sign: 3, deg: 0, lon: 90 });
   });
 
   it("falls back to the daily snapshot when transitions are absent", () => {
     const viewing = new Date("2020-01-02T10:00:00Z");
     expect(effectiveSignDegree(mercuryData, undefined, "mercury", viewing))
-      .toEqual(degreeInSign(90.11));
+      .toEqual({ ...degreeInSign(90.11), lon: 90.11 });
   });
 
   it("falls back to the daily snapshot for an empty transitions array", () => {
     const viewing = new Date("2020-01-02T10:00:00Z");
     expect(effectiveSignDegree(mercuryData, [], "mercury", viewing))
-      .toEqual(degreeInSign(90.11));
+      .toEqual({ ...degreeInSign(90.11), lon: 90.11 });
   });
 
   it("falls back to the daily snapshot when viewing before the first transition", () => {
     const viewing = new Date("2019-12-01T00:00:00Z"); // before any listed entry
     // dayIndex clamps to day 0 (91.0° = 1° Cancer)
     expect(effectiveSignDegree(mercuryData, transitions, "mercury", viewing))
-      .toEqual(degreeInSign(91.0));
+      .toEqual({ ...degreeInSign(91.0), lon: 91.0 });
   });
 
   it("keeps the daily snapshot when the transition is exactly at the snapshot time", () => {
@@ -173,13 +173,13 @@ describe("effectiveSignDegree", () => {
     const viewing = new Date("2020-01-02T10:00:00Z");
     // The snapshot already reflects a crossing at/before its own timestamp.
     expect(effectiveSignDegree(mercuryData, atSnapshot, "mercury", viewing))
-      .toEqual(degreeInSign(90.11));
+      .toEqual({ ...degreeInSign(90.11), lon: 90.11 });
   });
 
   it("applies a transition occurring exactly at the viewed instant", () => {
     const viewing = new Date("2020-01-02T05:16:24Z"); // == the crossing time
     expect(effectiveSignDegree(mercuryData, transitions, "mercury", viewing))
-      .toEqual({ sign: 2, deg: 29.99 });
+      .toEqual({ sign: 2, deg: 29.99, lon: 89.99 });
   });
 
   it("uses the latest crossing when multiple happen between snapshot and viewed time", () => {
@@ -190,13 +190,13 @@ describe("effectiveSignDegree", () => {
     ];
     const viewing = new Date("2020-01-02T10:00:00Z");
     expect(effectiveSignDegree(mercuryData, recrossings, "mercury", viewing))
-      .toEqual({ sign: 3, deg: 0 });
+      .toEqual({ sign: 3, deg: 0, lon: 90 });
   });
 
   it("treats a lone first transition (no prior entry) as a direct entry at 0°", () => {
     const lone: Transition[] = [{ sign: 2, enters: "2020-01-02T05:00:00Z" }];
     const viewing = new Date("2020-01-02T10:00:00Z");
     expect(effectiveSignDegree(mercuryData, lone, "mercury", viewing))
-      .toEqual({ sign: 2, deg: 0 });
+      .toEqual({ sign: 2, deg: 0, lon: 60 });
   });
 });

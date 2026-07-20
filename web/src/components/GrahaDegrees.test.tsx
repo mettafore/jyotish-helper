@@ -181,6 +181,35 @@ describe("GrahaDegrees rāśi/nakshatra view toggle", () => {
     expect(nakRow.getAttribute("title")).toMatch(/20\.5°/);
   });
 
+  it("derives the nakshatra from the raw longitude, immune to display rounding", () => {
+    // 359.996° rounds to 30.00° within Pisces; reconstructing sign*30+deg
+    // would wrap to 360° and misreport end-of-Revati as Ashwini pada 1.
+    const edge: DegreesData = {
+      ayanamsa: "lahiri", start: "2020-01-01T00:00:00Z", stepDays: 1,
+      planets: { saturn: [359.996, 359.997] },
+    };
+    const { getByRole, getByText, queryByText } = render(
+      <GrahaDegrees data={edge} transitions={{}} date={date} script="western" />,
+    );
+    fireEvent.click(getByRole("button", { name: /nakshatra/i }));
+    expect(getByText("Revati")).toBeInTheDocument();
+    expect(getByText("· 4")).toBeInTheDocument();
+    expect(queryByText("Ashwini")).toBeNull();
+  });
+
+  it("exposes the active view via aria-pressed, matching the seg-control pattern", () => {
+    const { getByRole } = render(
+      <GrahaDegrees data={data} transitions={{}} date={date} script="western" />,
+    );
+    const rasi = getByRole("button", { name: /rāśi/i });
+    const nak = getByRole("button", { name: /nakshatra/i });
+    expect(rasi.getAttribute("aria-pressed")).toBe("true");
+    expect(nak.getAttribute("aria-pressed")).toBe("false");
+    fireEvent.click(nak);
+    expect(rasi.getAttribute("aria-pressed")).toBe("false");
+    expect(nak.getAttribute("aria-pressed")).toBe("true");
+  });
+
   it("persists the chosen view across mounts", () => {
     const first = render(
       <GrahaDegrees data={data} transitions={{}} date={date} script="western" />,
